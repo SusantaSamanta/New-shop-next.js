@@ -12,23 +12,19 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from "next/navigation";
-import { useTheme } from 'next-themes';
 
 
 /// route : 3000/sign-in
 const page = () => {
     const [username, SetUsername] = useState('');
-    const debounced = useDebounceCallback(SetUsername, 2000); /// for using debounceCallback setUsername get it's value after 2sc. Using debounced('value'). on every change in debounced setUsername get it's value in 2sc delay
-    const [usernameMessage, setUsernameMessage] = useState('');
-    const [isCheckingUsername, setIsCheckingUsername] = useState(false);
+    // const debounced = useDebounceCallback(SetUsername, 2000); /// for using debounceCallback setUsername get it's value after 2sc. Using debounced('value'). on every change in debounced setUsername get it's value in 2sc delay
+    const [errorMessage, setErrorMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
     const router = useRouter();
-    const {theme, setTheme} = useTheme();
 
 
     const signUpSchema = z.object({
-        username: z.string().min(3, "Minimum 3 character require"),
+        name: z.string().min(3, "Minimum 3 character require"),
         email: z.string().email("Enter a valid email"),
         password: z.string().min(6, "Password must be 6 character")
     });
@@ -36,44 +32,16 @@ const page = () => {
     const form = useForm<formSchema>({
         resolver: zodResolver(signUpSchema),
         defaultValues: {
-            username: '',
+            name: '',
             email: '',
             password: '',
         }
     });
 
-    useEffect(() => {
-        const checkUserNameUnique = async () => {
-            if (username.length < 3) {
-                return
-            }
-            setIsCheckingUsername(true);
-            setUsernameMessage('');
-            try {
-                const { data } = await axios.get(`/api/check-username-unique?username=${username}`);
-                if (data.success) {
-                    console.log(data.message);
-                    setUsernameMessage(data.message);
-                    setIsUsernameAvailable(true);
-                }
-            } catch (error) {
-                const apiError: any = error as AxiosError;
-                console.log("User name checking error", apiError.response?.data.message ?? "error");
-                setUsernameMessage(apiError.response?.data.message ?? "Unknown error")
-                setIsUsernameAvailable(false);
-            } finally {
-                setIsCheckingUsername(false);
-            }
-        }
-        checkUserNameUnique();
-    }, [username])
 
 
 
     const onSubmit = async (data: formSchema) => {
-        if (!isUsernameAvailable) {
-            return toast.warning("User name is not available change now")
-        }
         if (isSubmitting) {
             return toast.warning("wait")
         }
@@ -82,17 +50,17 @@ const page = () => {
             const res = await axios.post('/api/sign-up', data);
             if (res.data.success) {
                 toast.success(res.data.message);
-                router.replace(`/verify/${data.email}`)
+                // router.replace(`/verify/${data.email}`);
             }
-            console.log(res.data)
+            // console.log(res.data)
         } catch (error) {
             const apiError: any = error as AxiosError;
             console.log("User name checking error", apiError.response?.data.message ?? "error");
-            toast.success(apiError.response?.data.message ?? "error");
+            setErrorMessage(apiError.response?.data.message ?? "Something unexpected error")
+            // toast.error(apiError.response?.data.message ?? "error");
         } finally {
             setIsSubmitting(false);
         }
-        console.log(data)
     }
 
     return (
@@ -107,45 +75,16 @@ const page = () => {
 
                             <FieldGroup>
 
-
-                                {/* <Controller name='username' control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='name'>Enter username</FieldLabel>
-                      <Input {...field} id='username' placeholder='Susanta' aria-invalid={fieldState.invalid} />
-
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-
-                    </Field>
-                  )}
-                /> */}
-
-                                <Controller name='username' control={form.control}
+                                <Controller name='name' control={form.control}
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor='name'>Enter username</FieldLabel>
-                                            <Input {...field} id='username'
-                                                placeholder='Susanta'
+                                            <Input {...field} id='name'
+                                                placeholder='Susanta Samanta'
                                                 aria-invalid={fieldState.invalid}
-                                                onChange={(e) => {
-                                                    setUsernameMessage('')
-                                                    field.onChange(e); // this use for fill the text field 
-                                                    debounced(e.target.value); // this debounced set setUsername value after 2sc
-                                                }}
                                             />
-                                            <div className='flex gap-2'>
-                                                {isCheckingUsername && <p className='inline-block'>
-                                                    <Loader2 className='animate-spin' /></p>
-                                                }
-                                                {usernameMessage &&
-                                                    <p className={`text-[14px] tracking-tight ${usernameMessage === "This username is already taken." ? "text-red-600" : "text-green-400"}`}>
-                                                        {usernameMessage}
-                                                    </p>
-                                                }
-                                            </div>
-                                            {!usernameMessage &&
-                                                fieldState.invalid && <FieldError errors={[fieldState.error]} />
-                                            }
+
+                                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
 
                                         </Field>
                                     )}
@@ -156,10 +95,21 @@ const page = () => {
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor='email'>Enter email</FieldLabel>
-                                            <Input {...field} id='email' placeholder='susanta@gmail.com' aria-invalid={fieldState.invalid} />
-
-                                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-
+                                            <Input {...field} id='email'
+                                                placeholder='susanta@gmail.com'
+                                                aria-invalid={fieldState.invalid}
+                                                onChange={(e) => {
+                                                    setErrorMessage('')
+                                                    field.onChange(e);
+                                                }}
+                                            />
+                                            {errorMessage ?
+                                                <p className={`text-[14px] tracking-tight text-red-600`}>
+                                                    {errorMessage}
+                                                </p>
+                                                :
+                                                fieldState.invalid && <FieldError errors={[fieldState.error]} />
+                                            }
                                         </Field>
                                     )}
                                 />
@@ -169,7 +119,11 @@ const page = () => {
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor='password'>Password</FieldLabel>
-                                            <Input {...field} type='password' id='password' placeholder='•••••••' aria-invalid={fieldState.invalid} />
+                                            <Input {...field} id='password'
+                                                type='password'
+                                                placeholder='•••••••'
+                                                aria-invalid={fieldState.invalid}
+                                            />
 
                                             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
 
@@ -179,7 +133,9 @@ const page = () => {
                             </FieldGroup>
                         </FieldSet>
                         <Field>
-                            <Button type='submit' className={`my-6 w-full py-5 ${isSubmitting ? "bg-gray-600" : ""}`}>
+                            <Button type='submit'
+                                disabled={isSubmitting}
+                                className={`my-6 w-full py-5 disabled:bg-slate-500 disabled:cursor-not-allowed cursor-pointer`}>
                                 {isSubmitting && <Loader2 className='animate-spin' />}Sign up
                             </Button>
                         </Field>

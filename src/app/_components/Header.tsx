@@ -3,19 +3,21 @@ import Image from "next/image";
 import mainLogo from "../../../assets/App logo2.png";
 import {
     LayoutGrid,
+    Loader2,
     Search,
-    Moon,
-    Sun,
+    UserCircle,
 } from "lucide-react";
-import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import Link from "next/link";
 import CartList from "./CartList";
-import { useEffect, useState } from "react";
 import ThemeChangeBtn from "./ThemeChangeBtn";
+import { signOut, useSession } from "next-auth/react";
+import { toast } from "sonner";
 
 const Header = () => {
+
+    const { data: session, status } = useSession();
+    console.log(session?.user, status);
 
 
     return (
@@ -50,11 +52,22 @@ const Header = () => {
                 <div className="hidden md:flex items-center gap-4 md:gap-6">
 
                     <ThemeChangeBtn />
-
-                    {/* Cart Button */}
                     <CartList />
+                    <UserCircle />
+                    {status === "loading" &&
+                        <Loader2 className="animate-spin" />
+                    }
+                    {status === "authenticated" &&
+                        <Button onClick={() => {
+                            signOut();
+                            toast.success("Logout successful...");
+                        }}>Logout</Button>
+                    }
+                    {status === "unauthenticated" &&
+                        <Button><Link href={"/sign-in"}>Login</Link></Button>
+                    }
 
-                    <Button><Link href={"/sign-in"}>Login</Link></Button>
+
                 </div>
 
 
@@ -66,12 +79,21 @@ const Header = () => {
                             type="text"
                             placeholder="Search"
                             className="bg-transparent outline-none"
-                        /> */}
+                            /> */}
                     </div>
 
                     <ThemeChangeBtn />
 
-                    <Button><Link href={"/sign-in"}>Login</Link></Button>
+
+
+                    {status === "authenticated" ?
+                        <Button onClick={() => {
+                            signOut();
+                            toast.success("Logout successful...");
+                        }}>Logout</Button>
+                        :
+                        <Button><Link href={"/sign-in"}>Login</Link></Button>
+                    }
                 </div>
 
 

@@ -4,24 +4,21 @@ import { Controller, useForm } from 'react-hook-form';
 import * as z from 'zod';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useDebounceCallback } from 'usehooks-ts';
 import { toast } from "sonner"
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldSet } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from "next/navigation";
 import { signIn } from 'next-auth/react';
-import { useTheme } from 'next-themes';
 
 
 /// route : 3000/sign-in
 const page = () => {
-
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const router = useRouter();
-    const {theme, setTheme} = useTheme();
 
     const signInSchema = z.object({
         identifier: z.string().email("Enter a valid email"),
@@ -50,13 +47,12 @@ const page = () => {
                 password: data.password  // password send
             });
             if (res?.error) {
-                toast.error(res.error);
-                // console.log(res.error);
+                setErrorMessage(res.error);
             }
             if (res?.url) { // mean sign in successful by next-auth
                 toast.success("Sign in successfully.");
                 setTimeout(() => {
-                    router.replace("/dashboard");
+                    router.replace("/");
                 }, 500);
             }
         } catch (error) {
@@ -84,10 +80,21 @@ const page = () => {
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor='email'>Enter email</FieldLabel>
-                                            <Input {...field} id='email' placeholder='susanta@gmail.com' aria-invalid={fieldState.invalid} />
-
-                                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-
+                                            <Input {...field} id='email'
+                                                placeholder='susanta@gmail.com'
+                                                aria-invalid={fieldState.invalid}
+                                                onChange={(e) => {
+                                                    setErrorMessage('')
+                                                    field.onChange(e);
+                                                }}
+                                            />
+                                            {errorMessage ?
+                                                <p className={`text-[14px] tracking-tight text-red-600`}>
+                                                    {errorMessage}
+                                                </p>
+                                                :
+                                                fieldState.invalid && <FieldError errors={[fieldState.error]} />
+                                            }
                                         </Field>
                                     )}
                                 />
@@ -97,7 +104,13 @@ const page = () => {
                                     render={({ field, fieldState }) => (
                                         <Field data-invalid={fieldState.invalid}>
                                             <FieldLabel htmlFor='password'>Password</FieldLabel>
-                                            <Input {...field} type='password' id='password' placeholder='•••••••' aria-invalid={fieldState.invalid} />
+                                            <Input {...field} type='password' id='password'
+                                                placeholder='•••••••' aria-invalid={fieldState.invalid}
+                                                onChange={(e) => {
+                                                    setErrorMessage('')
+                                                    field.onChange(e);
+                                                }}
+                                            />
 
                                             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
 
@@ -107,7 +120,11 @@ const page = () => {
                             </FieldGroup>
                         </FieldSet>
                         <Field>
-                            <Button type='submit' className={`my-6 w-full py-5 ${isSubmitting ? "bg-gray-600" : ""} ${theme === "dark" ? "bg-white" : ""}`}>
+                            <Button
+                                type='submit'
+                                className={`my-6 w-full py-5 disabled:bg-slate-500 disabled:cursor-not-allowed dark:"bg-white" cursor-pointer`}
+                                disabled={isSubmitting}
+                            >
                                 {isSubmitting && <Loader2 className='animate-spin' />}Login
                             </Button>
                         </Field>
@@ -126,4 +143,4 @@ const page = () => {
     )
 }
 
-export default page
+export default page;
