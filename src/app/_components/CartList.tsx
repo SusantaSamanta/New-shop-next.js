@@ -73,8 +73,8 @@ const CartList = () => {
             {/* Trigger */}
             <SheetTrigger asChild>
                 <button className="relative cursor-pointer">
-                    <ShoppingCart className="h-6 w-6 mt-3 md:mt-1" />
-                    <span className="absolute top-1 md:-top-1 -right-2 bg-green-600 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                    <ShoppingCart className=" mt-1 md:mt-1" />
+                    <span className="absolute -top-1 md:-top-1 -right-2 bg-green-600 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
                         {cartItems.length}
                     </span>
                 </button>

@@ -9,18 +9,18 @@ import { useCart } from '@/context/CartContext'
 const MobileBottomNav = () => {
     const { isCartOpen } = useCart();
     const pathname = usePathname();
-    const activeStyle = " p-1 px-3 bg-blue-600 text-white rounded-lg";
-    const InActiveStyle = "p-1 px-3 rounded-lg";
+    const activeStyle = " p-2 bg-blue-600 text-white rounded-lg  transition-all duration-500";
+    const InActiveStyle = "p-2 rounded-lg  transition-all duration-300";
 
     return (
         <>
             {/* mobile nav bottom bar */}
-            <section className=" w-full fixed bottom-0 border md:hidden backdrop-blur-sm bg-[#ffffffb3] dark:bg-[#000000b9]">
-                <div className="w-full h-auto px-8 py-1 flex items-center justify-between gap-3 ">
+            <section className=" w-full fixed z-50 bottom-0 border-t md:hidden backdrop-blur-sm bg-[#ffffffb3] dark:bg-[#000000b9]">
+                <div className="w-full h-auto px-8 p-0 flex items-center justify-between">
                     <Link href={'/'} className={pathname === '/' ? activeStyle : InActiveStyle} >
                         <Home size={20} />
                     </Link>
-                    <Link href={'/category'} className={pathname === '/category' ? activeStyle : InActiveStyle} >
+                    <Link href={'/category'} className={pathname.includes('/category') ? activeStyle : InActiveStyle} >
                         <LayoutGrid size={20} />
                     </Link>
                     <Link href={'/profile'} className={pathname === '/profile' ? activeStyle : InActiveStyle} >

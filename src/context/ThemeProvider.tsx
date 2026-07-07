@@ -1,8 +1,6 @@
 "use client";
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import Header from "@/app/_components/Header";
-import MobileBottomNav from "@/app/_components/MobileBottomNav";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
@@ -12,8 +10,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <Header />
-      <MobileBottomNav />
       {children}
     </NextThemesProvider>
   );

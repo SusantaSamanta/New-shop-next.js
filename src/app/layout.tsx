@@ -40,14 +40,11 @@ export default function RootLayout({
         <AuthProvider> 
           <CartProvider>
             <ThemeProvider>
-              {/* <Header /> */}
               {children}
               <Toaster position="top-center" />
-              {/* <MobileBottomNav /> */}
             </ThemeProvider>
           </CartProvider>
         </AuthProvider>
-
       </body>
     </html>
   );
