@@ -19,8 +19,7 @@ const Header = () => {
 
     const { data: session, status } = useSession();
     // console.log(session?.user, status);
-    const pathname = usePathname()
-    console.log(pathname)
+    const pathname = usePathname();
 
 
     return (

@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/context/ThemeProvider";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "@/components/ui/sonner"
 import AuthProvider from "@/context/AuthProvider";
+import { AppContextProvider } from "@/context/AppContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,13 +38,15 @@ export default function RootLayout({
       className={`${outfit.className} ${outfit.className} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AuthProvider> 
-          <CartProvider>
-            <ThemeProvider>
-              {children}
-              <Toaster position="top-center" />
-            </ThemeProvider>
-          </CartProvider>
+        <AuthProvider>
+          <AppContextProvider>
+            <CartProvider>
+              <ThemeProvider>
+                {children}
+                <Toaster position="top-center" />
+              </ThemeProvider>
+            </CartProvider>
+          </AppContextProvider>
         </AuthProvider>
       </body>
     </html>

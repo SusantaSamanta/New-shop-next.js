@@ -1,38 +1,32 @@
-import Link from "next/link";
+"use client"
+import CategorySideBar from "@/app/_components/CategorySideBar";
+import { usePathname } from "next/navigation";
 import React from "react";
 
-export default function CategoryLayout({
-    children,
-}: Readonly<{
-    children: React.ReactNode;
-}>) {
+export default function CategoryLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
+
+    const pathname = usePathname();
+
+    const category = pathname.split("/").pop()?.replace(/-/g, " ");
+
     return (
-        <main className='w-full h-screen flex flex-col items-center'>
-            <div className="w-full max-w-6xl h-screen  overflow-hidden relative md:pt-16">
-               
-                <header className="bg-background/70">Category : Fruits</header>
-                <section className='w-full max-h-full flex justify-start border-2'>
+        <div className='w-full h-screen flex justify-center overflow-hidden items-center md:pt-16'>
+            <div className="w-full max-w-6xl h-full flex flex-col ">
 
-                    <aside className={`w-20 lg:w-25  z-10 h-screen  p-4 flex flex-col border transition-all duration-300`}>
-                        <div className="h-full flex flex-col justify-between border-0">
-                            <nav className="flex flex-col gap-3 mt-15 lg:mt-20">
-                                <Link href="/category/" className={`p-2 pl-0 rounded-md flex items-center gap-2 `}>All</Link>
-                                <Link href="/category/fruits" className={`p-2 pl-0 rounded-md flex items-center gap-2 `}>Fruits</Link>
-                                <Link href="/category/milk-dairy" className={`p-2 pl-0 rounded-md flex items-center gap-2 `}>Milk-Dairy</Link>
-                                <Link href="/category/bakery" className={`p-2 pl-0 rounded-md flex items-center gap-2 `}>Bakery</Link>
-                            </nav>
+                <div className="w-full  border bg-background px-5 py-1 text-base font-semibold capitalize">
+                    {category === "category" ? "All Products" : category}
+                </div>
+                <div className='w-full h-full flex overflow-hidden border'>
+
+                    <CategorySideBar />
 
 
-                        </div>
-                    </aside>
-
-                    {/* Page Content */}
-                    <main className="flex-1 p-5 overflow-y-auto">
+                    <main className="flex-1 pb-25 p-3 md:p-5 md:pb-20 bg-gray-50 dark:bg-background/80 overflow-y-auto">
                         {children}
                     </main>
 
-                </section>
+                </div>
             </div>
-        </main>
+        </div>
     );
 }
