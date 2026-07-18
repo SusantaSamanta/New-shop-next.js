@@ -18,21 +18,24 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 const Header = () => {
 
     const { data: session, status } = useSession();
-    // console.log(session?.user, status);
+    // console.log(session, status);
     const pathname = usePathname();
 
 
     return (
-        <header className={`border-y shadow-sm fixed ${pathname.includes('/category')? "-top-11" : "top-0"} md:top-0 w-full z-50  bg-background/50 dark:bg-background/70 backdrop-blur-md border-[0.5px] border-white/20  transition-all duration-300`}>
+        <header className={`border-y shadow-sm fixed ${pathname.includes('/category') ? "-top-11" : "top-0"} md:top-0 w-full z-50  bg-background/50 dark:bg-background/70 backdrop-blur-md border-[0.5px] border-white/20  transition-all duration-300`}>
             <section className="max-w-7xl mx-auto px-4 py-1 md:py-2 flex items-center justify-between">
                 {/* Left Side */}
                 <div className="flex items-center gap-4 md:gap-8">
-                    <Link href={'/'}>
-                        <Image className={`w-13 md:w-15 `}
+                    <Link href={'/'} className="flex items-end gap-2">
+                        <Image className={`w-13 md:w-15 hidden md:block`}
                             src={mainLogo}
                             alt="logo"
                             priority
                         />
+                        <span className="text-xl md:text-2xl font-bold text-green-600">
+                            FreshNext
+                        </span>
                     </Link>
 
                     {/* <div className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-blue-100 dark:bg-gray-700 cursor-pointer">
@@ -112,7 +115,7 @@ export default Header;
 
 
 import { categories } from "../../../assets/category icons/category images";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 
 function CategoryDropdown() {
@@ -120,7 +123,7 @@ function CategoryDropdown() {
         <div className="hidden md:block">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <div className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-[#bae2ff4d] border dark:bg-gray-700 cursor-pointer">
+                    <div className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-[#bae2ff4d] border dark:bg-[#b6c6ff3f] cursor-pointer">
                         <LayoutGrid className="h-5 w-5" />
                         <span>Category</span>
                     </div>
@@ -137,7 +140,7 @@ function CategoryDropdown() {
 
                                     >
                                         <Image
-                                            src={item.icon?? "../../../assets/category icons/fruits.png"}
+                                            src={item.icon ?? "../../../assets/category icons/fruits.png"}
                                             alt="icon"
                                             width={27}
                                             height={27}

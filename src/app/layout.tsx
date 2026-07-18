@@ -6,6 +6,7 @@ import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "@/components/ui/sonner"
 import AuthProvider from "@/context/AuthProvider";
 import { AppContextProvider } from "@/context/AppContext";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +43,9 @@ export default function RootLayout({
           <AppContextProvider>
             <CartProvider>
               <ThemeProvider>
-                {children}
+                <TooltipProvider>
+                  {children}
+                </TooltipProvider>
                 <Toaster position="top-center" />
               </ThemeProvider>
             </CartProvider>

@@ -15,22 +15,33 @@ const CategorySideBar = () => {
     const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
     useEffect(() => {
-        console.log(pathname.includes('/collection'))
         setIsCollection(pathname.includes('/collection') ? true : false);
-
-        let index = categories.findIndex(
-            (item) => pathname === `/category/${item.value}`
-        );
-        index = collections.findIndex(
-            (item) => pathname === `/category/collection/${item.value}`
-        );
-        if (index !== -1) {
-            itemRefs.current[index]?.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-            });
-        }
+        
+        setTimeout(() => {
+            const index = categories.findIndex(
+                (item) => pathname === `/category/${item.value}`
+            );
+            console.log(index)
+            if (index !== -1) {
+                itemRefs.current[index]?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            }
+            const indexForCollection = collections.findIndex(
+                (item) => pathname === `/category/collection/${item.value}`
+            );
+            if (indexForCollection !== -1) {
+                itemRefs.current[indexForCollection]?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
+            }
+        }, 20);
+        console.log(pathname, 'ok')
     }, [pathname]);
+    console.log(pathname)
+
 
     return (
         <aside className="w-22 lg:w-28 h-full border-r bg-background overflow-y-auto">
@@ -87,7 +98,7 @@ const CategorySideBar = () => {
                 {isCollection &&
                     <>
                         {/* Dynamic collections */}
-                        {collections.map((collection,index) => (
+                        {collections.map((collection, index) => (
                             <Link
                                 key={collection.value}
                                 ref={(el) => { itemRefs.current[index] = el; }}

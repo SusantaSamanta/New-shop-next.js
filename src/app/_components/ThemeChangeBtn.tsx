@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -14,7 +15,7 @@ const ThemeChangeBtn = () => {
     return (
         <>
             {/* Large button*/}
-            <div className="hidden md:flex items-center gap-2 border p-2 rounded-2xl ">
+            {/* <div className="hidden md:flex items-center gap-2 border p-2 rounded-2xl ">
                 <Switch
                     className="cursor-pointer"
                     checked={theme === "dark"}
@@ -29,9 +30,23 @@ const ThemeChangeBtn = () => {
                     <Moon className="h-4 w-4" />
                 }
 
-            </div>
+            </div> */}
+            <Button
+                variant="outline"
+                size="icon"
+                onClick={() =>
+                    setTheme(theme === "dark" ? "light" : "dark")
+                }
+                className=' bg-[#ffffff39] border'
+            >
+                {theme === "dark" ? (
+                    <Sun className="h-5 w-5" />
+                ) : (
+                    <Moon className="h-5 w-5" />
+                )}
+            </Button>
             {/* Small Button */}
-            <div className="flex items-center gap-2 md:hidden">
+            {/* <div className="flex items-center gap-2 text-muted-foreground">
                 <div
                     className="p-1 border-2 rounded-full cursor-pointer transition-transform duration-300 hover:scale-110"
                     onClick={() =>
@@ -45,7 +60,7 @@ const ThemeChangeBtn = () => {
                     }
                 </div>
 
-            </div>
+            </div> */}
 
 
         </>

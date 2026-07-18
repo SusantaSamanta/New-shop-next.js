@@ -1,20 +1,21 @@
 "use client"
 import CategorySideBar from "@/app/_components/CategorySideBar";
-import { usePathname } from "next/navigation";
+import { ArrowLeftCircle } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 export default function CategoryLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
 
     const pathname = usePathname();
-
     const category = pathname.split("/").pop()?.replace(/-/g, " ");
+    const router = useRouter();
 
     return (
         <div className='w-full h-screen flex justify-center overflow-hidden items-center md:pt-16'>
             <div className="w-full max-w-6xl h-full flex flex-col ">
 
-                <div className="w-full  border bg-background px-5 py-1 text-base font-semibold capitalize">
-                    {category === "category" ? "All Products" : category}
+                <div className="w-full flex gap-2 border bg-background px-5 py-1 text-base font-semibold capitalize">
+                    <ArrowLeftCircle onClick={() => router.back()} className="font-normal " /> {category === "category" ? "All Products" : category}
                 </div>
                 <div className='w-full h-full flex overflow-hidden border'>
 
