@@ -7,17 +7,16 @@ import {
   LayoutDashboard,
   Package,
   FolderTree,
-  BadgePercent,
   Store,
   Boxes,
   ShoppingCart,
   Users,
-  TicketPercent,
   ImageIcon,
   BarChart3,
   Settings,
   LogOut,
   Plus,
+  ChevronRight,
 } from "lucide-react";
 
 import {
@@ -25,12 +24,20 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 const menuItems = [
   {
@@ -42,6 +49,17 @@ const menuItems = [
     title: "Products",
     href: "/admin/products",
     icon: Package,
+    children: [
+      {
+        title: "All Products",
+        href: "/admin/products",
+      },
+      {
+        title: "Add Product",
+        href: "/admin/products/add",
+        icon: Plus,
+      },
+    ],
   },
   {
     title: "Categories",
@@ -102,7 +120,7 @@ export default function AdminSidebar() {
     <Sidebar>
       {/* Header */}
       <SidebarHeader className="border-b pl-4">
-        <Link href={'/'}  className="text-xl font-bold text-green-600">
+        <Link href={'/'} className="text-2xl font-bold text-green-600">
           FreshNext
         </Link>
         <p className="text-xs text-muted-foreground">
@@ -110,15 +128,64 @@ export default function AdminSidebar() {
         </p>
       </SidebarHeader>
 
+
+
       {/* Navigation */}
       <SidebarContent>
         <SidebarGroup>
+          <SidebarGroupLabel>Platform</SidebarGroupLabel>
+
           <SidebarMenu>
             {menuItems.map((item) => {
               const Icon = item.icon;
 
+              if (item.children) {
+                return (
+                  <Collapsible
+                    key={item.title}
+                    defaultOpen={pathname.startsWith(item.href)}
+                    className="group/collapsible"
+                  >
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton
+                          isActive={pathname.startsWith(item.href)}
+                        >
+                          <Icon className="h-5 w-5" />
+
+                          <span>{item.title}</span>
+
+                          <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {item.children.map((child) => (
+                            <SidebarMenuSubItem key={child.href}>
+                              <SidebarMenuSubButton
+                                asChild
+                                isActive={pathname === child.href}
+                              >
+                                <Link href={child.href}>
+                                  {child.icon && (
+                                    <child.icon className="h-4 w-4" />
+                                  )}
+
+                                  <span>{child.title}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+                );
+              }
+
               return (
-                <SidebarMenuItem key={item.title} className="py-0.5 px-0.5">
+                <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
                     isActive={pathname === item.href}
@@ -128,9 +195,6 @@ export default function AdminSidebar() {
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
-                  <SidebarMenuAction>
-                    {/* <Plus /> <span className="sr-only">Add Project</span> */}
-                  </SidebarMenuAction>
                 </SidebarMenuItem>
               );
             })}

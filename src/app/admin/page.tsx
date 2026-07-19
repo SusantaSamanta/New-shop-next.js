@@ -48,44 +48,41 @@ const stats = [
         positive: false,
         icon: ImageIcon,
     },
-    {
-        title: "Coupons",
-        value: "14",
-        change: "+4",
-        positive: true,
-        icon: TicketPercent,
-    },
+    // {
+    //     title: "Coupons",
+    //     value: "14",
+    //     change: "+4",
+    //     positive: true,
+    //     icon: TicketPercent,
+    // },
 ];
 
 export default function AdminDashboard() {
     return (
-        <div className="space-y-8">
+        <div className="space-y-4">
             {/* Greeting */}
-            <div className="rounded-2xl border bg-linear-to-r from-green-600 to-emerald-500 p-8 text-white">
-                <h1 className="text-3xl font-bold">
+            <div className="rounded-2xl border bg-linear-to-r from-green-600 to-emerald-500 p-4 text-white">
+                <h1 className="text-xl md:text-2xl font-bold">
                     Welcome back, Admin 👋
                 </h1>
 
-                <p className="mt-2 text-green-100">
+                <p className="text-sm  md:mt-1 text-green-100">
                     Manage your FreshNext grocery platform from one place.
                 </p>
             </div>
 
-            {/* Statistics */}
-
             <section>
-                <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                <div className="grid gap-2 md:gap-4 grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
                     {stats.map((item) => {
                         const Icon = item.icon;
-
                         return (
                             <div
                                 key={item.title}
-                                className="rounded-2xl border bg-background p-6 transition hover:shadow-lg"
+                                className="rounded-2xl border bg-background p-3 md:p-4 transition hover:shadow-md"
                             >
                                 <div className="flex items-center justify-between">
-                                    <div className="rounded-xl bg-primary/10 p-3">
-                                        <Icon className="h-6 w-6 text-primary" />
+                                    <div className="rounded-xl bg-primary/10 p-2 md:p-2">
+                                        <Icon className="h-4 w-4 md:h-6 md:w-6 text-primary" />
                                     </div>
 
                                     <div
@@ -104,9 +101,9 @@ export default function AdminDashboard() {
                                     </div>
                                 </div>
 
-                                <h2 className="mt-6 text-3xl font-bold">{item.value}</h2>
+                                <h2 className="mt-4 text-xl md:text-2xl font-bold">{item.value}</h2>
 
-                                <p className="mt-1 text-muted-foreground">
+                                <p className="mt-0 text-sm text-muted-foreground">
                                     {item.title}
                                 </p>
                             </div>
@@ -117,13 +114,13 @@ export default function AdminDashboard() {
 
             {/* Quick Actions */}
 
-            <section className="grid gap-6 lg:grid-cols-2">
-                <div className="rounded-2xl border bg-background p-6">
-                    <h2 className="mb-5 text-lg font-semibold">
+            <section className="grid gap-4 lg:grid-cols-2">
+                <div className="rounded-2xl border bg-background p-4">
+                    <h2 className="mb-4 text-lg font-semibold">
                         Quick Actions
                     </h2>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-2 md:gap-4">
                         {[
                             "Add Product",
                             "Add Category",
@@ -134,7 +131,7 @@ export default function AdminDashboard() {
                         ].map((item) => (
                             <button
                                 key={item}
-                                className="rounded-xl border p-4 text-left transition hover:bg-muted"
+                                className="rounded-xl border p-2 md:p-4 text-left transition hover:bg-muted"
                             >
                                 {item}
                             </button>
@@ -144,8 +141,8 @@ export default function AdminDashboard() {
 
                 {/* Top Performing Stores */}
 
-                <div className="rounded-2xl border bg-background p-6">
-                    <div className="flex items-center justify-between mb-6">
+                <div className="rounded-2xl border bg-background p-4">
+                    <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-semibold">
                             Top Performing Stores
                         </h2>
@@ -155,7 +152,7 @@ export default function AdminDashboard() {
                         </button>
                     </div>
 
-                    <div className="space-y-5">
+                    <div className="space-y-2">
                         {[
                             {
                                 name: "Kolkata Central",
@@ -184,7 +181,7 @@ export default function AdminDashboard() {
                         ].map((store, index) => (
                             <div
                                 key={store.name}
-                                className="flex items-center justify-between rounded-xl border p-4 hover:bg-muted/50 transition"
+                                className="flex items-center justify-between rounded-xl border p-2 hover:bg-muted/50 transition"
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
@@ -213,15 +210,18 @@ export default function AdminDashboard() {
                 </div>
             </section>
 
+
+
+
             {/* System Status & Low Stock */}
 
-            <section className="grid gap-6 lg:grid-cols-2">
-                {/* Low Stock Products */}
+            <section className="grid gap-4 lg:grid-cols-2">
+                {/* Top Selling Products */}
 
-                <div className="rounded-2xl border bg-background p-6">
-                    <div className="flex items-center justify-between mb-6">
+                <div className="rounded-2xl border bg-background p-4">
+                    <div className="mb-4 flex items-center justify-between">
                         <h2 className="text-lg font-semibold">
-                            Low Stock Products
+                            Top Selling Products
                         </h2>
 
                         <button className="text-sm text-primary hover:underline">
@@ -229,40 +229,249 @@ export default function AdminDashboard() {
                         </button>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-0 grid md:grid-cols-2 gap-2">
                         {[
                             {
                                 name: "Fresh Apple",
-                                stock: 8,
+                                sold: 1580,
+                                revenue: "₹1.82L",
                             },
                             {
                                 name: "Organic Milk",
-                                stock: 5,
+                                sold: 1465,
+                                revenue: "₹1.36L",
                             },
                             {
                                 name: "Brown Bread",
-                                stock: 3,
+                                sold: 1324,
+                                revenue: "₹78K",
                             },
                             {
                                 name: "Tomato",
-                                stock: 9,
+                                sold: 1208,
+                                revenue: "₹64K",
                             },
-                        ].map((item) => (
+                            {
+                                name: "Banana",
+                                sold: 1160,
+                                revenue: "₹58K",
+                            },
+                            {
+                                name: "Potato",
+                                sold: 1085,
+                                revenue: "₹55K",
+                            },
+                            {
+                                name: "Basmati Rice",
+                                sold: 956,
+                                revenue: "₹2.14L",
+                            },
+                            {
+                                name: "Eggs (12 pcs)",
+                                sold: 874,
+                                revenue: "₹92K",
+                            },
+                        ].map((product, index) => (
                             <div
-                                key={item.name}
-                                className="flex items-center justify-between rounded-xl border p-4"
+                                key={product.name}
+                                className="flex items-center justify-between rounded-xl border p-2 md:p-3 transition hover:bg-muted/40"
                             >
-                                <div>
-                                    <p className="font-medium">{item.name}</p>
+                                <div className="flex items-center gap-3">
+                                    {/* <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 font-semibold text-primary">
+                                        #{index + 1}
+                                    </div> */}
 
-                                    <p className="text-sm text-muted-foreground">
-                                        Remaining Stock
-                                    </p>
+                                    <div>
+                                        <p className="font-medium">{product.name}</p>
+
+                                        <p className="text-sm text-muted-foreground">
+                                            {product.sold.toLocaleString()} Sold
+                                        </p>
+                                    </div>
                                 </div>
 
-                                <span className="rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-400">
-                                    {item.stock}
-                                </span>
+                                <div className="text-right">
+                                    <p className="font-semibold">{product.revenue}</p>
+
+                                    <p className="text-xs text-green-600">
+                                        Total Revenue
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Least Selling Products */}
+                <div className="rounded-2xl border bg-background p-4">
+                    <div className="mb-4 flex items-center justify-between">
+                        <h2 className="text-lg font-semibold">
+                            Least Selling Products
+                        </h2>
+
+                        <button className="text-sm text-primary hover:underline">
+                            View All
+                        </button>
+                    </div>
+
+                    <div className="space-y-0 grid md:grid-cols-2 gap-2">
+                        {[
+                            {
+                                name: "Dragon Fruit",
+                                sold: 18,
+                                revenue: "₹3.6K",
+                            },
+                            {
+                                name: "Kiwi",
+                                sold: 24,
+                                revenue: "₹5.2K",
+                            },
+                            {
+                                name: "Broccoli",
+                                sold: 31,
+                                revenue: "₹2.9K",
+                            },
+                            {
+                                name: "Olive Oil",
+                                sold: 38,
+                                revenue: "₹12.8K",
+                            },
+                            {
+                                name: "Almond Milk",
+                                sold: 42,
+                                revenue: "₹8.7K",
+                            },
+                            {
+                                name: "Quinoa",
+                                sold: 47,
+                                revenue: "₹10.4K",
+                            },
+                            {
+                                name: "Avocado",
+                                sold: 53,
+                                revenue: "₹7.1K",
+                            },
+                            {
+                                name: "Green Tea",
+                                sold: 61,
+                                revenue: "₹6.5K",
+                            },
+                        ].map((product, index) => (
+                            <div
+                                key={product.name}
+                                className="flex items-center justify-between rounded-xl border p-2 md:p-3 transition hover:bg-muted/40"
+                            >
+                                <div className="flex items-center gap-3">
+                                    {/* <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100 font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                                        #{index + 1}
+                                    </div> */}
+
+                                    <div>
+                                        <p className="font-medium">{product.name}</p>
+
+                                        <p className="text-sm text-muted-foreground">
+                                            {product.sold} Sold
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="text-right">
+                                    <p className="font-semibold">{product.revenue}</p>
+
+                                    <p className="text-xs text-red-600">
+                                        Low Demand
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+
+
+            <section className="grid gap-4 lg:grid-cols-2">
+                {/* Top Selling Products */}
+
+                <div className="rounded-2xl border bg-background p-4">
+                    <div className="mb-4 flex items-center justify-between">
+                        <h2 className="text-lg font-semibold">
+                            Top Selling Products
+                        </h2>
+
+                        <button className="text-sm text-primary hover:underline">
+                            View All
+                        </button>
+                    </div>
+
+                    <div className="space-y-0 grid md:grid-cols-2 gap-2">
+                        {[
+                            {
+                                name: "Fresh Apple",
+                                sold: 1580,
+                                revenue: "₹1.82L",
+                            },
+                            {
+                                name: "Organic Milk",
+                                sold: 1465,
+                                revenue: "₹1.36L",
+                            },
+                            {
+                                name: "Brown Bread",
+                                sold: 1324,
+                                revenue: "₹78K",
+                            },
+                            {
+                                name: "Tomato",
+                                sold: 1208,
+                                revenue: "₹64K",
+                            },
+                            {
+                                name: "Banana",
+                                sold: 1160,
+                                revenue: "₹58K",
+                            },
+                            {
+                                name: "Potato",
+                                sold: 1085,
+                                revenue: "₹55K",
+                            },
+                            {
+                                name: "Basmati Rice",
+                                sold: 956,
+                                revenue: "₹2.14L",
+                            },
+                            {
+                                name: "Eggs (12 pcs)",
+                                sold: 874,
+                                revenue: "₹92K",
+                            },
+                        ].map((product, index) => (
+                            <div
+                                key={product.name}
+                                className="flex items-center justify-between rounded-xl border p-2 md:p-3 transition hover:bg-muted/40"
+                            >
+                                <div className="flex items-center gap-3">
+                                    {/* <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 font-semibold text-primary">
+                                        #{index + 1}
+                                    </div> */}
+
+                                    <div>
+                                        <p className="font-medium">{product.name}</p>
+
+                                        <p className="text-sm text-muted-foreground">
+                                            {product.sold.toLocaleString()} Sold
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="text-right">
+                                    <p className="font-semibold">{product.revenue}</p>
+
+                                    <p className="text-xs text-green-600">
+                                        Total Revenue
+                                    </p>
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -270,7 +479,7 @@ export default function AdminDashboard() {
 
                 {/* Platform Status */}
 
-                <div className="rounded-2xl border bg-background p-6">
+                <div className="rounded-2xl border bg-background p-4">
                     <h2 className="mb-6 text-lg font-semibold">
                         Platform Status
                     </h2>
@@ -324,6 +533,9 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </section>
+
+
+
         </div>
     );
 }

@@ -23,11 +23,16 @@ export default function AdminLayout({
 
             <SidebarInset>
                 <AdminHeader />
-                <main className="p-2 md:p-4">
-                    {children}
+
+                <main className="w-full overflow-hidden">
+                    <div className="mx-auto w-full max-w-7xl p-2 md:p-4">
+                        {children}
+                    </div>
                 </main>
 
-                <div>Footer</div>
+                <div className="h-10 border-t flex items-center justify-center">
+                    Footer
+                </div>
             </SidebarInset>
         </SidebarProvider>
     );

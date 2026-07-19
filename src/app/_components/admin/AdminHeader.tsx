@@ -56,7 +56,7 @@ const AdminHeader = () => {
 
           <Input
             placeholder="Search..."
-            className="w-72 pl-10"
+            className="md:w-45 lg:w-72 pl-10"
           />
 
         </div>
