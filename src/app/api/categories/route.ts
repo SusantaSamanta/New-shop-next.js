@@ -1,0 +1,4 @@
+// GET    /api/categories
+
+
+

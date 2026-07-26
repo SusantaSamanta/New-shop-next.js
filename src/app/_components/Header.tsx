@@ -18,7 +18,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 const Header = () => {
 
     const { data: session, status } = useSession();
-    // console.log(session, status);
+    console.log(session, status);
     const pathname = usePathname();
 
 

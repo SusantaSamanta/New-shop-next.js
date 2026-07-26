@@ -27,15 +27,15 @@ export default function ProductDetailsPage() {
                             Product Details
                         </h1>
 
-                        <p className="text-muted-foreground">
-                            View complete product information.
+                        <p className="text-sm text-muted-foreground">
+                            View product information.
                         </p>
                     </div>
                 </div>
 
-                <Button asChild>
+                <Button asChild className="py-5">
                     <Link href="/admin/products/1/edit">
-                        <Pencil className="mr-2 h-4 w-4" />
+                        <Pencil className="h-4 w-4" />
                         Edit Product
                     </Link>
                 </Button>
@@ -44,15 +44,15 @@ export default function ProductDetailsPage() {
             <div className="grid gap-4 md:grid-cols-3">
                 {/* Images */}
 
-                <div className="grid grid-cols-4 gap-4 rounded-2xl border-4 p-3 md:p-4 md:block">
+                <div className="grid grid-cols-4 gap-4 rounded-2xl border p-3 md:p-4 md:block">
                     {/* Main Image */}
                     <div className="col-span-3">
                         <Image
-                            src="https://picsum.photos/500"
+                            src="https://picsum.photos/700"
                             alt="product"
                             width={500}
                             height={500}
-                            className="h-full w-full rounded-xl object-cover"
+                            className="h-7/8 w-full rounded-xl object-cover"
                         />
                     </div>
 
@@ -75,7 +75,7 @@ export default function ProductDetailsPage() {
 
                 <div className="md:col-span-2 space-y-4">
 
-                    <div className="rounded-2xl border bg-background p-6">
+                    <div className="rounded-2xl border bg-background p-4">
                         <div className="flex items-center justify-between">
                             <h2 className="text-2xl font-bold">
                                 Amul Gold Milk
@@ -88,14 +88,18 @@ export default function ProductDetailsPage() {
                             Fresh full cream milk suitable for tea,
                             coffee and daily consumption.
                         </p>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                            Fresh full cream milk suitable for tea,
+                            coffee and daily consumption. Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aperiam eligendi quia harum sint optio, corporis vel animi, facilis beatae placeat architecto eaque accusantium nulla. Architecto quo quae accusantium vel eum!
+                        </p>
                     </div>
 
-                    <div className="rounded-2xl border bg-background p-6">
-                        <h3 className="mb-5 text-lg font-semibold">
+                    <div className="rounded-2xl border bg-background p-4">
+                        <h3 className="mb-4 text-lg font-semibold">
                             Pricing
                         </h3>
 
-                        <div className="grid gap-5 sm:grid-cols-3">
+                        <div className="grid gap-5 grid-cols-3">
                             <div>
                                 <p className="text-sm text-muted-foreground">
                                     Selling Price
@@ -128,12 +132,12 @@ export default function ProductDetailsPage() {
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border bg-background p-6">
+                    <div className="rounded-2xl border bg-background p-4">
                         <h3 className="mb-5 text-lg font-semibold">
                             Product Details
                         </h3>
 
-                        <div className="grid gap-5 sm:grid-cols-2">
+                        <div className="grid gap-5 grid-cols-2">
                             <div>
                                 <p className="text-sm text-muted-foreground">
                                     Weight
@@ -176,12 +180,12 @@ export default function ProductDetailsPage() {
                         </div>
                     </div>
 
-                    <div className="rounded-2xl border bg-background p-6">
+                    <div className="rounded-2xl border bg-background p-4">
                         <h3 className="mb-5 text-lg font-semibold">
                             Additional Information
                         </h3>
 
-                        <div className="grid gap-5 sm:grid-cols-2">
+                        <div className="grid gap-5 grid-cols-2">
                             <div>
                                 <p className="text-sm text-muted-foreground">
                                     Created At

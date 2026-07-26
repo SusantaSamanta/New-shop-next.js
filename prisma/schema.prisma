@@ -8,14 +8,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model users {
-  id               Int      @id @default(autoincrement())
-  name             String
-  email            String   @unique
-  password         String
-  verificationOtp  String   @default("")
-  verifyCodeExpire String
-  isVerified       Boolean  @default(false)
-  createAt         DateTime @default(now())
-  updateAt         DateTime @default(now()) @updatedAt
+enum Role {
+  CUSTOMER
+  STORE_MANAGER
+  ADMIN
 }
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum AuthProvider {
+  CREDENTIALS
+  GOOGLE
+}
+
+model users {
+  id String @id @default(cuid())
+
+  // Personal Information
+  name     String
+  email    String  @unique
+  phone    String?  @unique
+  password String?
+  gender   Gender?
+  age      String?
+
+  role Role @default(CUSTOMER)
+
+  verificationOtp  String  @default("")
+  verifyCodeExpire String
+  isEmailVerified  Boolean @default(false)
+
+  // Notification Preference
+  emailNotification Boolean @default(true)
+  pushNotification  Boolean @default(true)
+
+  createAt DateTime @default(now())
+  updateAt DateTime @default(now()) @updatedAt
+}
+
+
+/////////////////////////////   Category Schemas  ///////////////////////////////////
+model categories {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+
+  description String?
+  image       String?
+
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+

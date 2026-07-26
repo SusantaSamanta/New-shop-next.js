@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
                     if (!user) { // if we not find input email in db 
                         throw new Error("No user found with this email");
                     }
-                    if (!user.isVerified) { // if email find but email not verify 
+                    if (!user.isEmailVerified) { // if email find but email not verify 
                         throw new Error("Please verify your email");
                     }
 
@@ -50,17 +50,19 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 // we insert some other information from user(return from authorize fun) inside token and session
                 // but we not insert other data type into token(nextAuth's)
-                token._id = user._id?.toString(); // so we need to modify next-auth interface User. In /src/types/next.auth.d.ts
+                token.id = user.id.toString(); // so we need to modify next-auth interface User. In /src/types/next.auth.d.ts
                 token.username = user.username;
-                token.isVerified = user.isVerified;
+                token.isEmailVerified = user.isEmailVerified;
+                token.role = user.role;
             }
             return token;
         },
         async session({ session, token }) {
             if (token) {
-                session.user._id = token._id;
-                session.user.username = token.username;
-                session.user.isVerified = token.isVerified;
+                session.user.id = token.id as string;
+                session.user.username = token.username as string;
+                session.user.isEmailVerified = token.isEmailVerified as boolean;
+                session.user.role = token.role as string;
             }
             return session;
         }

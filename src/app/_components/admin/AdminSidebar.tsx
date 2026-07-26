@@ -65,6 +65,17 @@ const menuItems = [
     title: "Categories",
     href: "/admin/categories",
     icon: FolderTree,
+    children: [
+      {
+        title: "All Categories",
+        href: "/admin/categories",
+      },
+      {
+        title: "Add Categories",
+        href: "/admin/categories/add",
+        icon: Plus,
+      },
+    ],
   },
   // {
   //   title: "Brands",

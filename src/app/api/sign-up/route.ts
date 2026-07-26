@@ -12,7 +12,7 @@ export async function POST(request: Request) {
         const userExist = await prisma.users.findUnique({
             where: {
                 email,
-                // isVerified: true
+                // isEmailVerified: true
             }
         });
 
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         const verificationOtp = Math.floor(100000 + Math.random() * 900000).toString();
 
         if (userExist) {
-            if (userExist?.isVerified) {
+            if (userExist?.isEmailVerified) {
                 return Response.json({ success: false, message: "An user in this email already exist." }, { status: 401 });
             }
             else {
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     }
 }
 
-/// fresh_next=# update users set "isVerified" = true where email='susantasamanta0708@gmail.com';
+/// fresh_next=# update users set "isEmailVerified" = true where email='susantasamanta0708@gmail.com';
 
 
 

@@ -49,10 +49,7 @@ export default function ProductsPage() {
 
 
 
-
-            {/* Product Table Placeholder */}
-
-            <div className="rounded-2xl border bg-background">
+            {/* <div className="rounded-2xl border bg-background">
                 <div className="border-b p-4">
                     <h2 className="text-lg font-semibold">
                         Product List
@@ -64,11 +61,9 @@ export default function ProductsPage() {
                 </div>
             </div>
 
-            {/* Pagination Placeholder */}
-
             <div className="rounded-2xl border border-dashed bg-background p-6 text-center">
                 Pagination Component
-            </div>
+            </div> */}
         </div>
     );
 }
