@@ -26,11 +26,11 @@ export default function AddCategoryPage() {
 
                         <div>
                             <h1 className="text-xl md:text-2xl font-bold">
-                                Add Category
+                                Edit Category
                             </h1>
 
                             <p className="text-muted-foreground">
-                                Create a new product category.
+                                Edit the product category details.
                             </p>
                         </div>
                     </div>

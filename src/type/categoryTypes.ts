@@ -3,9 +3,9 @@ export type CategoryType = {
   name: string;
   slug: string;
   description?: string;
-  image: string;
+  image?: string;
   isActive: boolean;
-  sortOrder: number;
-  createdAt: string;
-  updatedAt: string;
+  sortOrder?: number;
+  createdAt?: string;
+  updatedAt?: string;
 };

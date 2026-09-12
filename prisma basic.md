@@ -73,5 +73,8 @@ RESTful backend built with Express.js, Prisma ORM, and MySQL featuring CRUD oper
     For every time we run this command if no error.
     Inside Migration folder new file create like : 20260627100131_phone_add/migration.sql
 
+## After migration also do prisma generate :
+    npx prisma generate
 
+    this not so impotent like migration. But with out this command vs code show some error for this reason i not get prisma suggestions so do it for every changes in schema.prisma
 

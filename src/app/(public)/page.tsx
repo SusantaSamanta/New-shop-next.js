@@ -34,7 +34,7 @@ export default function Home() {
 
   return (
     <div className="w-full h-auto flex items-center justify-center gap-3 flex-wrap pt-16 md:pt-20 ">
-      <div className="w-full max-w-7xl space-y-4 md:space-y-8 px-2 md:px-6 border">
+      <div className="w-full max-w-7xl space-y-4 md:space-y-8 px-2 md:px-6">
         <section className="w-full flex justify-center rounded-2xl overflow-hidden">
           <BannerSlider />
         </section>

@@ -32,6 +32,9 @@ export default function ProductsPage() {
                     </Link>
                 </Button>
             </div>
+
+
+            
             <ProductStats />
 
             {/* Search & Filters */}
