@@ -1,22 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import CategoryStats from "@/app/_components/admin/categories/CategoryStats";
-import CategoryFilters from "@/app/_components/admin/categories/CategoryFilters";
-import CategoryTable from "@/app/_components/admin/categories/CategoryTable";
-import CategoryPagination from "@/app/_components/admin/categories/CategoryPagination";
+import CategoryStats from "@/app/_components/admin/categories/CategoryStats"; 
+import CategoryTable from "@/app/_components/admin/categories/CategoryTable"; 
 
 // import CategoryStats from "@/_components/admin/category/CategoryStats";
 // import CategoryTable from "@/components/admin/category/CategoryTable";
@@ -52,16 +42,12 @@ export default function CategoriesPage() {
             {/* Statistics */}
             <CategoryStats />
 
-
-    
-            {/* Search and filter */}
-            <CategoryFilters />
+ 
 
             {/* Table */}
             <CategoryTable />
 
-            {/* Pagination */}
-            <CategoryPagination />
+
 
         </div>
     );

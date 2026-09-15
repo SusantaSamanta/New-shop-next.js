@@ -1,30 +1,33 @@
 // GET    /api/categories
 
 import { PrismaClient } from "@prisma/client"
-import { NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
-// export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-export async function GET(request: NextRequest, params: any) {
+export async function GET() {
     try {
-        const { id } = await params;
         const prisma = new PrismaClient();
-        const category = await prisma.categories.findUnique({
-            where: {
-                id 
+        const categories = await prisma.categories.findMany({
+            orderBy: {
+                createdAt: "desc"
             }
         })
-        if (!category) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "Category not found"
-                },
-                {status: 404},
-            )
-        }
 
+        return NextResponse.json(
+            {
+                success: true,
+                message: categories.length ? "Categories found" : "No categories found",
+                categories
+            },
+            { status: 200 },
+        )
     } catch (error) {
-
+        console.error(error)
+        return NextResponse.json(
+            {
+                success: false,
+                message: "Server error"
+            },
+            { status: 500 },
+        )
     }
 }
-

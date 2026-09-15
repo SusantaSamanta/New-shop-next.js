@@ -21,10 +21,14 @@ import ThemeChangeBtn from "../ThemeChangeBtn";
 
 const AdminHeader = () => {
   const pathname = usePathname();
+  const segments = pathname.split("/").filter(Boolean);
+  const editIndex = segments.indexOf("edit");
   const page =
     pathname === "/admin"
       ? "Dashboard"
-      : pathname.split("/").pop()?.replace("-", " ");
+      : editIndex !== -1
+        ? `Edit ${segments[editIndex - 1]?.replace("-", " ")}`
+        : segments[segments.length - 1]?.replace("-", " ");
 
   return (
     <header className="px-2 sticky top-0 z-50 flex  h-12 md:h-16 items-center justify-between border-b bg-background ">

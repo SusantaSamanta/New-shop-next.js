@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
             description,
             image,
             isActive,
-            // sortOrder,
+            sortOrder,
         } = body;
 
         // Validation
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
                 description,
                 image,
                 isActive: isActive ?? true,
-                // sortOrder: sortOrder ?? 0,
+                sortOrder: sortOrder ?? 0,
             },
         });
 
@@ -107,9 +107,15 @@ export async function POST(request: NextRequest) {
 }
 
 
+async function wait() {
+  return new Promise((resolve) => {
+    setTimeout(resolve, 1000);
+  });
+}
 
 /// GET   /api/admin/categories
 export async function GET(request: NextRequest) {
+    await wait()
     try {
         const admin = await requireAdmin(request);
         if (!admin.success) {
@@ -118,30 +124,47 @@ export async function GET(request: NextRequest) {
                 { status: admin.status }
             );
         }
-        const prisma = new PrismaClient()
-        const categories = await prisma.categories.findMany({
-            orderBy: {
-                createdAt: "desc",
-            },
-        });
 
-        if (!categories) {
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: "No categories found.",
+        const searchParams = request.nextUrl.searchParams;
+
+        const page = Math.max(parseInt(searchParams.get("page") || "1") || 1, 1);
+        const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "10") || 10, 1), 100);
+        const status = searchParams.get("status"); // "active" | "inactive"
+console.log(status)
+        const where = {
+            ...(status === "active" && { isActive: true }),
+            ...(status === "inactive" && { isActive: false }),
+        };
+
+        const prisma = new PrismaClient()
+
+        const [categories, total] = await Promise.all([
+            prisma.categories.findMany({
+                where,
+                orderBy: {
+                    createdAt: "desc",
                 },
-                { status: 404 }
-            );
-        }
+                skip: (page - 1) * limit,
+                take: limit,
+            }),
+            prisma.categories.count({ where }),
+        ]);
 
         return NextResponse.json(
             {
                 success: true,
-                message: "Category created successfully.",
+                message: "Categories fetched successfully.",
                 categories,
+                pagination: {
+                    page,
+                    limit,
+                    total,
+                    totalPages: Math.ceil(total / limit),
+                    hasNextPage: page < Math.ceil(total / limit),
+                    hasPrevPage: page > 1,
+                },
             },
-            { status: 201 }
+            { status: 200 }
         );
     } catch (error) {
         console.error(error);

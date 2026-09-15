@@ -78,3 +78,21 @@
 # Remove-Item -Recurse -Force .next  
 <!-- Remove-Item -Recurse -Force .next  -->
 <!-- Remove-Item -Recurse -Force .next  -->
+
+
+# s
+
+	\l                  → List databases
+	\c database_name    → Connect to database
+	\dt                 → List tables
+	\d table_name       → Show table structure
+	\du                 → List users
+	\dn                 → List schemas
+	\di                 → List indexes
+	\dv                 → List views
+	\conninfo            → Connection information
+	\! cls              → Clear screen (Windows)
+	\?                  → psql help
+	\h                  → SQL help
+	\q                  → Exit psql
+
