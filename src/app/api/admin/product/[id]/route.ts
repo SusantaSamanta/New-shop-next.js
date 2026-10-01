@@ -1,8 +1,6 @@
-//  PATCH   /api/admin/categories/:id
-//  DELETE   /api/admin/categories/:id
-/// GET    /api/admin/categories/:id
-
-
+//  PATCH   /api/admin/product/:id
+//  DELETE   /api/admin/product/:id
+/// GET    /api/admin/product/:id
 
 import { requireAdmin } from "@/lib/auth/requireAdmin";
 import { PrismaClient } from "@prisma/client"
@@ -25,22 +23,22 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             return NextResponse.json(
                 {
                     success: false,
-                    message: "Category id require."
+                    message: "Product id require."
                 },
                 { status: 404 },
             )
         }
         const prisma = new PrismaClient();
-        const category = await prisma.categories.findUnique({
+        const product = await prisma.products.findUnique({
             where: {
                 id
             }
         })
-        if (!category) {
+        if (!product) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: "Category not found"
+                    message: "Product not found"
                 },
                 { status: 404 },
             )
@@ -48,8 +46,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         return NextResponse.json(
             {
                 success: true,
-                message: "Category found",
-                category
+                message: "Product found",
+                product
             },
             { status: 200 },
         )
@@ -67,16 +65,16 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 
-// patch: /api/admin/categories/:id
+// patch: /api/admin/product/:id
 // Update fields matching by id
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const admin = await requireAdmin(request);
-    // if (!admin.success) {
-    //     return NextResponse.json(
-    //         { success: false, message: admin.message },
-    //         { status: admin.status }
-    //     );
-    // }
+    if (!admin.success) {
+        return NextResponse.json(
+            { success: false, message: admin.message },
+            { status: admin.status }
+        );
+    }
 
     try {
         const { id } = await params;
@@ -84,13 +82,13 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
         const prisma = new PrismaClient();
 
-        const category = await prisma.categories.findUnique({
+        const product = await prisma.products.findUnique({
             where: {
                 id
             }
         });
 
-        if (!category) return NextResponse.json({ success: false, message: "Category not found" }, { status: 404 });
+        if (!product) return NextResponse.json({ success: false, message: "Product not found" }, { status: 404 });
 
         let body;
         try {
@@ -102,62 +100,99 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
         const {
             name,
             slug,
+            shortDescription,
             description,
-            image,
+            categories,
+            subcategories,
+            mrp,
+            sellingPrice,
+            tax,
+            weight,
+            unit,
+            shelfLife,
+            country,
+            thumbnail,
+            galleryImages,
             isActive,
-            sortOrder,
         } = body;
 
-        if (name === undefined && slug === undefined && description === undefined && image === undefined && isActive === undefined && sortOrder === undefined) {
+        if (
+            name === undefined &&
+            slug === undefined &&
+            shortDescription === undefined &&
+            description === undefined &&
+            categories === undefined &&
+            subcategories === undefined &&
+            mrp === undefined &&
+            sellingPrice === undefined &&
+            tax === undefined &&
+            weight === undefined &&
+            unit === undefined &&
+            shelfLife === undefined &&
+            country === undefined &&
+            thumbnail === undefined &&
+            galleryImages === undefined &&
+            isActive === undefined
+        ) {
             return NextResponse.json(
                 { success: false, message: "Nothing to update. Send at least one field." },
                 { status: 400 }
             );
         }
 
-        /// Check that name already exist or not ? 
-        if (name !== undefined && name !== category.name) {
-            const existingName = await prisma.categories.findFirst({
+        /// Check that name already exist or not ?
+        if (name !== undefined && name !== product.name) {
+            const existingName = await prisma.products.findFirst({
                 where: { name, NOT: { id } },
             });
             if (existingName) {
                 return NextResponse.json(
-                    { success: false, message: "Category name already exists." },
+                    { success: false, message: "Product name already exists." },
                     { status: 409 }
                 );
             }
         }
 
-        /// Check that slug name already exist or not ? 
-        if (slug !== undefined && slug !== category.slug) {
-            const existingSlug = await prisma.categories.findFirst({
+        /// Check that slug already exist or not ?
+        if (slug !== undefined && slug !== product.slug) {
+            const existingSlug = await prisma.products.findFirst({
                 where: { slug, NOT: { id } },
             });
             if (existingSlug) {
                 return NextResponse.json(
-                    { success: false, message: "Category slug already exists." },
+                    { success: false, message: "Product slug already exists." },
                     { status: 409 }
                 );
             }
         }
 
-        const updatedCategory = await prisma.categories.update({
+        const updatedProduct = await prisma.products.update({
             where: { id },
             data: {
                 ...(name !== undefined && { name }),
                 ...(slug !== undefined && { slug }),
+                ...(shortDescription !== undefined && { shortDescription }),
                 ...(description !== undefined && { description }),
-                ...(image !== undefined && { image }),
+                ...(categories !== undefined && { categories }),
+                ...(subcategories !== undefined && { subcategories }),
+                ...(mrp !== undefined && { mrp }),
+                ...(sellingPrice !== undefined && { sellingPrice }),
+                ...(tax !== undefined && { tax }),
+                ...(weight !== undefined && { weight }),
+                ...(unit !== undefined && { unit }),
+                ...(shelfLife !== undefined && { shelfLife }),
+                ...(country !== undefined && { country }),
+                ...(thumbnail !== undefined && { thumbnail }),
+                ...(galleryImages !== undefined && { galleryImages }),
                 ...(isActive !== undefined && { isActive }),
-                ...(sortOrder !== undefined && { sortOrder }),
             },
         });
 
         return NextResponse.json(
             {
                 success: true,
-                message: "Category updated successfully.",
-                category: updatedCategory
+                message: "Product updated successfully.",
+                product: updatedProduct
             },
             { status: 200 },
         );
@@ -172,7 +207,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 }
 
 
-// delete: /api/admin/categories/:id
+// delete: /api/admin/product/:id
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const admin = await requireAdmin(request);
@@ -189,22 +224,22 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
         const prisma = new PrismaClient();
 
-        const category = await prisma.categories.findUnique({
+        const product = await prisma.products.findUnique({
             where: {
                 id
             }
         });
 
-        if (!category) return NextResponse.json({ success: false, message: "Category not found" }, { status: 404 });
+        if (!product) return NextResponse.json({ success: false, message: "Product not found" }, { status: 404 });
 
-        await prisma.categories.delete({
+        await prisma.products.delete({
             where: { id }
         });
 
         return NextResponse.json(
             {
                 success: true,
-                message: "Category deleted successfully."
+                message: "Product deleted successfully."
             },
             { status: 200 }
         );
@@ -217,6 +252,3 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         );
     }
 }
-
-
-

@@ -68,4 +68,42 @@
   }
 
 
+  /////////////////////////////   Product Schemas  ///////////////////////////////////
+  model products {
+    id          String   @id @default(cuid())
+    name        String   @unique
+    slug        String   @unique
+
+    shortDescription String?
+    description      String?
+
+    categories    String[]
+    subcategories  String[] @default([])
+
+    mrp           Decimal  @db.Decimal(10, 2)
+    sellingPrice  Decimal  @db.Decimal(10, 2)
+    tax           Decimal  @db.Decimal(10, 2) @default(0)
+
+    weight    String
+    unit      String
+    shelfLife String
+    country   String
+
+    thumbnail     String?
+    galleryImages String[] @default([])
+
+    isActive Boolean @default(true)
+
+    // Sales tracking (managed by backend only)
+    numberOfTimesBuy Int @default(0)
+    totalSold        Int @default(0)
+    totalRevenue     Decimal @default(0) @db.Decimal(12, 2)
+    averageRating    Decimal @default(0) @db.Decimal(3, 2)
+    numberOfReviews  Int @default(0)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+  }
+
+
 

@@ -158,7 +158,7 @@ export default function ProductTable() {
 
                       <DropdownMenuItem asChild>
                         <Link
-                          href={`/admin/products/${product.id}/edit`}
+                          href={`/admin/products/edit/${product.id}`}
                         >
                           <Pencil className="mr-2 h-4 w-4" />
                           Edit

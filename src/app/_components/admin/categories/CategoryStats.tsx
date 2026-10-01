@@ -1,42 +1,52 @@
 "use client";
 
-import {
-    FolderTree,
-    CheckCircle2,
-    XCircle,
-    Package,
-    ArrowUpRight,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { toast } from "sonner";
+import { FolderTree, CheckCircle2, XCircle, Package, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const stats = [
+type Stats = {
+    total: number;
+    active: number;
+    inactive: number;
+};
+
+type StatItem = {
+    title: string;
+    key: string;
+    value?: number;
+    icon: typeof FolderTree;
+    color: string;
+    bg: string;
+};
+
+const baseStats: StatItem[] = [
     {
         title: "Total Categories",
-        value: "18",
-        change: "+2",
+        key: "total",
         icon: FolderTree,
         color: "text-blue-600",
         bg: "bg-blue-100 dark:bg-blue-950/30",
     },
     {
         title: "Active Categories",
-        value: "16",
-        change: "+1",
+        key: "active",
         icon: CheckCircle2,
         color: "text-green-600",
         bg: "bg-green-100 dark:bg-green-950/30",
     },
     {
         title: "Inactive Categories",
-        value: "2",
-        change: "-1",
+        key: "inactive",
         icon: XCircle,
         color: "text-red-600",
         bg: "bg-red-100 dark:bg-red-950/30",
     },
     {
         title: "Products Assigned",
-        value: "1,286",
-        change: "+24",
+        key: "products",
+        value: 1000,
         icon: Package,
         color: "text-orange-600",
         bg: "bg-orange-100 dark:bg-orange-950/30",
@@ -44,9 +54,30 @@ const stats = [
 ];
 
 export default function CategoryStats() {
+    const [stats, setStats] = useState<Stats>({ total: 0, active: 0, inactive: 0 });
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        let active = true;
+        (async () => {
+            try {
+                const response = await axios.get("/api/admin/categories/stats");
+                if (active) setStats(response.data?.stats ?? { total: 0, active: 0, inactive: 0 });
+            } catch (error) {
+                const err = error as { response?: { data?: { message?: string } } };
+                toast.error(err.response?.data?.message || "Failed to load stats.");
+            } finally {
+                if (active) setIsLoading(false);
+            }
+        })();
+        return () => {
+            active = false;
+        };
+    }, []);
+
     return (
         <div className="grid gap-2 md:gap-4 grid-cols-2 xl:grid-cols-5">
-            {stats.map((item) => {
+            {baseStats.map((item) => {
                 const Icon = item.icon;
 
                 return (
@@ -60,7 +91,11 @@ export default function CategoryStats() {
                             </div>
                             <div className="w-full">
                                 <h2 className="text-2xl md:text-3xl font-bold">
-                                    {item.value}
+                                    {item.value !== undefined
+                                        ? item.value.toLocaleString()
+                                        : isLoading
+                                          ? <Skeleton className="h-7 w-10 mb-3" />
+                                          : stats[item.key as keyof Stats].toLocaleString()}
                                 </h2>
                                 <p className="mt-0 md:mt-1 text-xs md:text-sm text-muted-foreground">
                                     {item.title}

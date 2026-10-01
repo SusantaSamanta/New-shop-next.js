@@ -107,15 +107,9 @@ export async function POST(request: NextRequest) {
 }
 
 
-async function wait() {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 1000);
-  });
-}
 
 /// GET   /api/admin/categories
 export async function GET(request: NextRequest) {
-    await wait()
     try {
         const admin = await requireAdmin(request);
         if (!admin.success) {
@@ -130,7 +124,7 @@ export async function GET(request: NextRequest) {
         const page = Math.max(parseInt(searchParams.get("page") || "1") || 1, 1);
         const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "10") || 10, 1), 100);
         const status = searchParams.get("status"); // "active" | "inactive"
-console.log(status)
+
         const where = {
             ...(status === "active" && { isActive: true }),
             ...(status === "inactive" && { isActive: false }),

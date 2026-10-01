@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
 import {
-    Eye,
     Pencil,
     Trash2,
     FolderTree,
@@ -27,6 +26,17 @@ import {
 import CategoryPagination from "./CategoryPagination";
 import { Skeleton } from "@/components/ui/skeleton";
 import CategoryFilters from "./CategoryFilters";
+
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Category = {
     id: string;
@@ -56,7 +66,12 @@ export default function CategoryTable() {
     const [categories, setCategories] = useState<Category[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
-    const [CurrentStatus, setCurrentStatus] = useState<Status>("all");
+    const [deletedIds, setDeletedIds] = useState<string[]>([]);
+    const [currentStatus, setCurrentStatus] = useState<Status>(() => {
+        if (typeof window === "undefined") return "all";
+        const urlStatus = new URLSearchParams(window.location.search).get("status");
+        return urlStatus === "active" || urlStatus === "inactive" ? (urlStatus as Status) : "all";
+    });
 
     const [loadPagination, setLoadPagination] = useState(true);
 
@@ -70,17 +85,22 @@ export default function CategoryTable() {
 
     const handlePageChange = (newPage: number) => {
         setPage(newPage);
-        router.replace(`?page=${newPage}`, { scroll: false });
+        const params = new URLSearchParams();
+        if (newPage > 1) params.set("page", String(newPage));
+        if (currentStatus !== "all") params.set("status", currentStatus);
+        const query = params.toString();
+        router.replace(query ? `?${query}` : "?", { scroll: false });
     };
 
     const fetchCategories = async () => {
         setIsLoading(true)
         try {
             const response = await axios.get("/api/admin/categories", {
-                params: { page, limit, status: CurrentStatus },
+                params: { page, limit, status: currentStatus },
             });
             setCategories(response.data?.categories ?? []);
             setPagination(response.data?.pagination ?? null);
+            setDeletedIds([]);
         } catch (error) {
             const err = error as { response?: { data?: { message?: string } } };
             toast.error(err.response?.data?.message || "Failed to load categories.");
@@ -91,35 +111,41 @@ export default function CategoryTable() {
     };
 
     useEffect(() => {
-        fetchCategories();
-    }, [page, limit]);
+        const timeout = setTimeout(() => {
+            fetchCategories();
+        }, 0);
+        return () => clearTimeout(timeout);
+    }, [page, limit, currentStatus]);
 
-    const handleDelete = async (category: Category) => {
-        if (!window.confirm(`Are you sure you want to delete "${category.name}"?`)) return;
+    const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
 
+    const handleDelete = async () => {
+        if (!categoryToDelete) return;
+
+        setDeletingId(categoryToDelete.id);
         try {
-            setDeletingId(category.id);
-            const response = await axios.delete(`/api/admin/categories/${category.id}`);
+            const response = await axios.delete(`/api/admin/categories/${categoryToDelete.id}`);
             toast.success(response.data.message);
-            if (categories.length === 1 && page > 1) {
-                handlePageChange(page - 1);
-            } else {
-                await fetchCategories();
-            }
+            setDeletedIds((prev) => [...prev, categoryToDelete.id]);
+            setCategoryToDelete(null);
         } catch (error) {
             const err = error as { response?: { data?: { message?: string } } };
             toast.error(err.response?.data?.message || "Something went wrong.");
+            setCategoryToDelete(null);
         } finally {
             setDeletingId(null);
         }
     };
 
-    const handleStatusChange = () => {
+    const handleStatusChange = (status: Status) => {
         if (isLoading) return;
-
+        setCurrentStatus(status)
         setLoadPagination(true);
-        handlePageChange(1);
-        fetchCategories();
+        setPage(1);
+        const params = new URLSearchParams();
+        if (status !== "all") params.set("status", status);
+        const query = params.toString();
+        router.replace(query ? `?${query}` : "?", { scroll: false });
     }
 
 
@@ -129,7 +155,7 @@ export default function CategoryTable() {
             
     
             {/* Search and filter */}
-            <CategoryFilters status={CurrentStatus} handleStatusChange={() => setIsLoading(true)} />
+            <CategoryFilters status={currentStatus} blockChange={isLoading} handleStatusChange={handleStatusChange} refetch={fetchCategories}/>
 
             {
                 isLoading ? <CategoryTableSkeleton row={limit} loadPagination={loadPagination} /> :
@@ -167,7 +193,11 @@ export default function CategoryTable() {
                                         categories.map((category) => (
                                             <tr
                                                 key={category.id}
-                                                className="border-b last:border-0 hover:bg-muted/40"
+                                                className={`border-b last:border-0 hover:bg-muted/40 ${
+                                                    deletedIds.includes(category.id)
+                                                        ? "pointer-events-none opacity-20"
+                                                        : ""
+                                                }`}
                                             >
                                                 <td className="px-6 py-3">
                                                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
@@ -222,6 +252,7 @@ export default function CategoryTable() {
                                                             <Button
                                                                 variant="ghost"
                                                                 size="icon"
+                                                                disabled={deletedIds.includes(category.id)}
                                                             >
                                                                 <MoreHorizontal className="h-4 w-4" />
                                                             </Button>
@@ -241,14 +272,9 @@ export default function CategoryTable() {
 
                                                             <DropdownMenuItem
                                                                 className="text-red-600 focus:text-red-600"
-                                                                disabled={deletingId === category.id}
-                                                                onClick={() => handleDelete(category)}
+                                                                onSelect={() => setCategoryToDelete(category)}
                                                             >
-                                                                {deletingId === category.id ? (
-                                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                                ) : (
-                                                                    <Trash2 className="mr-2 h-4 w-4" />
-                                                                )}
+                                                                <Trash2 className="mr-2 h-4 w-4" />
                                                                 Delete
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
@@ -273,6 +299,47 @@ export default function CategoryTable() {
                 hasNextPage={pagination?.hasNextPage ?? false}
                 onPageChange={handlePageChange}
             />}
+
+            {/* Delete confirmation dialog */}
+            <AlertDialog
+                open={!!categoryToDelete}
+                onOpenChange={(open) => {
+                    if (!open) setCategoryToDelete(null);
+                }}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Category</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to delete{" "}
+                            <span className="font-semibold text-foreground">
+                                &quot;{categoryToDelete?.name}&quot;
+                            </span>
+                            ? This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel
+                            disabled={deletingId === categoryToDelete?.id}
+                        >
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            className="bg-red-600 text-white hover:bg-red-700 focus-visible:ring-red-500"
+                            disabled={deletingId === categoryToDelete?.id}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                handleDelete();
+                            }}
+                        >
+                            {deletingId === categoryToDelete?.id && (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                            )}
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
 
         </div>
     );
