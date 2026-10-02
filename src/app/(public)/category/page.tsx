@@ -18,7 +18,7 @@ const CategoryPage = () => {
                         <Link
                             key={category.value}
                             href={`/category/${category.value}`}
-                            className="group rounded-2xl border bg-white p-2 transition hover:border-green-500 hover:shadow-lg dark:bg-background"
+                            className="group rounded-2xl border bg-card p-2 transition hover:border-green-500 hover:shadow-lg"
                         >
                             <div className="flex flex-col items-center">
                                 <Image
@@ -48,7 +48,7 @@ const CategoryPage = () => {
                         <Link
                             key={item.value}
                             href={`/category/collection/${item.value}`}
-                            className="group rounded-2xl border p-2 bg-white dark:bg-background transition hover:border-green-500 hover:shadow-md"
+                            className="group rounded-2xl border p-2 bg-white dark:bg-card transition hover:border-green-500 hover:shadow-md"
                         >
                             <div className="flex flex-col items-center gap-3">
                                 <item.icon

@@ -18,7 +18,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 const Header = () => {
 
     const { data: session, status } = useSession();
-    console.log(session, status);
     const pathname = usePathname();
 
 
@@ -62,7 +61,9 @@ const Header = () => {
 
                     <ThemeChangeBtn />
                     <CartList />
-                    <UserCircle />
+                    <Link href={'/profile'}>
+                        <UserCircle />
+                    </Link>
                     {status === "loading" &&
                         <Loader2 className="animate-spin" />
                     }

@@ -1,13 +1,11 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import ProductStats from "@/app/_components/admin/product/ProductStats";
-import ProductFilters from "@/app/_components/admin/product/ProductFilters";
 import ProductTable from "@/app/_components/admin/product/ProductTable";
-import ProductPagination from "@/app/_components/admin/product/ProductPagination";
 
 export default function ProductsPage() {
     return (
@@ -37,9 +35,6 @@ export default function ProductsPage() {
             
             <ProductStats />
 
-            {/* Search & Filters */}
-            <ProductFilters />
-
 
 
 
@@ -47,8 +42,6 @@ export default function ProductsPage() {
             {/* Statistics Placeholder */}
 
             <ProductTable />
-
-            <ProductPagination />
 
 
 

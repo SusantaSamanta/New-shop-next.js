@@ -4,42 +4,72 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-export default function ProductPagination() {
-  return (
-    <div className="flex flex-col gap-4 rounded-2xl border bg-background p-4 sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-sm text-muted-foreground">
-        Showing <span className="font-medium">1</span> to{" "}
-        <span className="font-medium">10</span> of{" "}
-        <span className="font-medium">1286</span> products
-      </p>
+type ProductPaginationProps = {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasPrevPage: boolean;
+    hasNextPage: boolean;
+    onPageChange: (page: number) => void;
+};
 
-      <div className="flex items-center gap-2">
-        <Button variant="outline" size="icon">
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
+export default function ProductPagination({
+    page,
+    limit,
+    total,
+    totalPages,
+    hasPrevPage,
+    hasNextPage,
+    onPageChange,
+}: ProductPaginationProps) {
+    const from = total === 0 ? 0 : (page - 1) * limit + 1;
+    const to = Math.min(page * limit, total);
 
-        <Button size="icon">1</Button>
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-        <Button variant="outline" size="icon">
-          2
-        </Button>
+    return (
+        <div className="flex flex-col gap-4 rounded-2xl border bg-background p-4 sm:flex-row sm:items-center sm:justify-between">
 
-        <Button variant="outline" size="icon">
-          3
-        </Button>
+            <p className="text-sm text-muted-foreground">
+                Showing <span className="font-medium">{from}</span> to{" "}
+                <span className="font-medium">{to}</span> of{" "}
+                <span className="font-medium">{total}</span> products
+            </p>
 
-        <Button variant="outline" size="icon">
-          4
-        </Button>
+            <div className="flex items-center gap-2">
 
-        <Button variant="outline" size="icon">
-          5
-        </Button>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    disabled={!hasPrevPage}
+                    onClick={() => onPageChange(page - 1)}
+                >
+                    <ChevronLeft className="h-4 w-4" />
+                </Button>
 
-        <Button variant="outline" size="icon">
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-      </div>
-    </div>
-  );
+                {pages.map((p) => (
+                    <Button
+                        key={p}
+                        size="icon"
+                        variant={p === page ? "default" : "outline"}
+                        onClick={() => onPageChange(p)}
+                    >
+                        {p}
+                    </Button>
+                ))}
+
+                <Button
+                    variant="outline"
+                    size="icon"
+                    disabled={!hasNextPage}
+                    onClick={() => onPageChange(page + 1)}
+                >
+                    <ChevronRight className="h-4 w-4" />
+                </Button>
+
+            </div>
+
+        </div>
+    );
 }

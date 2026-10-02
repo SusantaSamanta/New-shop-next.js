@@ -18,11 +18,11 @@ const ShopByCategory = () => {
   return (
     <section className="mx-auto lg:px-2 select-none">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-xl font-bold text-green-600">Shop by Category</h2>
+        <h2 className="text-xl font-bold text-green-600 dark:text-white">Shop by Category</h2>
 
         <Link
           href="/category"
-          className="text-green-600 font-medium hover:underline"
+          className="text-green-600 dark:text-white font-medium hover:underline"
         >
           View All
         </Link>
@@ -45,7 +45,7 @@ const ShopByCategory = () => {
               <Link
                 key={category.value}
                 href={`/category/${category.value}`}
-                className="flex flex-col items-center rounded-xl border bg-background p-1 shadow-sm "
+                className="flex flex-col items-center rounded-xl border p-1 shadow-sm bg-card"
               >
                 <div className="relative h-8 w-8 md:h-10  md:w-10">
                   <Image

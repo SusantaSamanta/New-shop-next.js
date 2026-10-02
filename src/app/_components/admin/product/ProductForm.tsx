@@ -56,7 +56,7 @@ export default function ProductForm() {
         shelfLife: z.string().min(1, "Shelf life is required"),
         country: z.string().min(2, "Country is required"),
         thumbnail: z.string(),
-        galleryImages: z.array(z.string()),
+        galleryImages: z.string(),
         isActive: z.boolean(),
     });
 
@@ -85,7 +85,7 @@ export default function ProductForm() {
             shelfLife: "",
             country: "",
             thumbnail: "",
-            galleryImages: [],
+            galleryImages: "",
             isActive: true,
         },
     });
@@ -184,7 +184,7 @@ export default function ProductForm() {
                         shelfLife: product.shelfLife ?? "",
                         country: product.country ?? "",
                         thumbnail: product.thumbnail ?? "",
-                        galleryImages: product.galleryImages ?? [],
+                        galleryImages: (product.galleryImages ?? []).join(", "),
                         isActive: product.isActive ?? true,
                     });
                     setSelectedCategories(product.categories ?? []);
@@ -214,14 +214,24 @@ export default function ProductForm() {
             setIsSubmitting(true);
             setNameErrorMess("");
             setSlugErrorMess("");
+
+            // The field holds a comma separated string, the API expects an array
+            const payload = {
+                ...data,
+                galleryImages: data.galleryImages
+                    .split(',')
+                    .map((url) => url.trim())
+                    .filter(Boolean),
+            };
+
             const response = id
                 ? await axios.patch(
                     `/api/admin/product/${id}`,
-                    data
+                    payload
                 )
                 : await axios.post(
                     "/api/admin/product",
-                    data
+                    payload
                 );
             toast.success(response.data.message);
             if (id) {
@@ -675,14 +685,7 @@ export default function ProductForm() {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor='galleryImages'>Gallery Images</FieldLabel>
-                                    <Input id='galleryImages'
-                                        value={field.value.join(', ')}
-                                        onChange={(e) => field.onChange(
-                                            e.target.value
-                                                .split(',')
-                                                .map((url) => url.trim())
-                                                .filter(Boolean)
-                                        )}
+                                    <Input {...field} id='galleryImages'
                                         placeholder="https://localhost/adimn/image, https://localhost/adimn/image"
                                         aria-invalid={fieldState.invalid}
                                     />

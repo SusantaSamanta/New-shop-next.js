@@ -21,7 +21,6 @@ const CategorySideBar = () => {
             const index = categories.findIndex(
                 (item) => pathname === `/category/${item.value}`
             );
-            console.log(index)
             if (index !== -1) {
                 itemRefs.current[index]?.scrollIntoView({
                     behavior: "smooth",
@@ -38,9 +37,7 @@ const CategorySideBar = () => {
                 });
             }
         }, 20);
-        console.log(pathname, 'ok')
     }, [pathname]);
-    console.log(pathname)
 
 
     return (
@@ -52,7 +49,7 @@ const CategorySideBar = () => {
                     href="/category"
                     className={`w-full flex flex-col items-center gap-2 rounded-xl p-2 transition-all 
             ${pathname === "/category"
-                            ? "bg-green-100 text-green-600"
+                            ? "bg-green-100 dark:bg-green-600/20 text-green-600 dark:text-white"
                             : "hover:bg-muted"
                         }`}
                 >
@@ -75,7 +72,7 @@ const CategorySideBar = () => {
                                 href={`/category/${category.value}`}
                                 className={`w-full flex flex-col items-center gap-1 rounded-xl p-2 transition-all
                         ${pathname === `/category/${category.value}`
-                                        ? "bg-green-100 text-green-600"
+                                        ? "bg-green-100 dark:bg-green-600/20 text-green-600 dark:text-white"
                                         : "hover:bg-muted"
                                     }`}
                             >
@@ -105,11 +102,11 @@ const CategorySideBar = () => {
                                 href={`/category/collection/${collection.value}`}
                                 className={`w-full flex flex-col items-center gap-2 rounded-xl p-2 transition-all
                         ${pathname === `/category/collection/${collection.value}`
-                                        ? "bg-green-100 text-green-700"
-                                        : "hover:bg-muted text-green-500"
+                                        ? "bg-green-100 dark:bg-green-600/20 text-green-700 dark:text-white"
+                                        : "hover:bg-muted"
                                     }`}
                             >
-                                <collection.icon className="w-6 h-8 md:w-8 md:h-10 rounded-xl object-contain" />
+                                <collection.icon className="w-6 h-8 md:w-8 md:h-10 rounded-xl object-contain text-green-600" />
 
                                 <span className="text-center text-xs font-medium leading-4">
                                     {collection.label}

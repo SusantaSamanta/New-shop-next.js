@@ -11,7 +11,7 @@ const MobileBottomNav = () => {
     const { isCartOpen } = useCart();
     const pathname = usePathname();
     const { isScrollDown } = useApp();
-    const activeStyle = " p-2 bg-blue-600 text-white rounded-lg  transition-all duration-500";
+    const activeStyle = " p-2 bg-green-600 text-white rounded-lg  transition-all duration-500";
     const InActiveStyle = "p-2 rounded-lg  transition-all duration-300";
 
     return (

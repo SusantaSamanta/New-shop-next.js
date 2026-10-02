@@ -11,11 +11,11 @@ export default function CategoryLayout({ children, }: Readonly<{ children: React
     const router = useRouter();
 
     return (
-        <div className='w-full h-screen flex justify-center overflow-hidden items-center md:pt-16'>
+        <div className='w-full h-screen flex justify-center overflow-hidden items-center md:pt-14'>
             <div className="w-full max-w-6xl h-full flex flex-col ">
 
-                <div className="w-full flex gap-2 border bg-background px-5 py-1 text-base font-semibold capitalize">
-                    <ArrowLeftCircle onClick={() => router.back()} className="font-normal " /> {category === "category" ? "All Products" : category}
+                <div className="w-full flex gap-2 border bg-background px-5 py-1 md:pt-2.5 text-base font-semibold capitalize">
+                    <ArrowLeftCircle onClick={() => router.back()} className="font-normal cursor-pointer" /> {category === "category" ? "All Products" : category}
                 </div>
                 <div className='w-full h-full flex overflow-hidden border'>
 

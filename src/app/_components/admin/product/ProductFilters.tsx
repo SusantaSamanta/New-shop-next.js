@@ -14,11 +14,17 @@ import {
 } from "@/components/ui/select";
 import { categories } from "../../../../../assets/category icons/category images";
 
-export default function ProductFilters() {
-
-
-
-
+export default function ProductFilters({
+    status,
+    blockChange,
+    handleStatusChange,
+    refetch,
+}: {
+    status: "all" | "active" | "inactive";
+    blockChange: boolean;
+    handleStatusChange: (status: "all" | "active" | "inactive") => void;
+    refetch: () => void;
+}) {
     return (
         <div className="rounded-2xl  bg-background p-0">
             <div className="grid  gap-4  grid-cols-5 lg:grid-cols-12">
@@ -33,6 +39,32 @@ export default function ProductFilters() {
                     />
                 </div>
 
+                {/* Status */}
+                <div className="col-span-2 lg:col-span-2">
+                    <Select
+                        value={status}
+                        onValueChange={handleStatusChange}
+                        disabled={blockChange}
+                    >
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="All Status" />
+                        </SelectTrigger>
+
+                        <SelectContent position="popper" sideOffset={4}>
+                            <SelectItem value="all">
+                                All Status
+                            </SelectItem>
+
+                            <SelectItem value="active">
+                                Active
+                            </SelectItem>
+
+                            <SelectItem value="inactive">
+                                Inactive
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
 
                 {/* Sort */}
                 <div className="col-span-2 lg:col-span-2">
@@ -56,10 +88,8 @@ export default function ProductFilters() {
                     </Select>
                 </div>
 
-
-
                 {/* Unit */}
-                <div className="col-span-2 lg:col-span-2">
+                {/* <div className="col-span-2 lg:col-span-2">
                     <Select defaultValue="all">
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Unit" />
@@ -75,16 +105,17 @@ export default function ProductFilters() {
                         </SelectContent>
                     </Select>
 
-                </div>
-
+                </div> */}
 
                 {/* Reset */}
                 <div className="col-span-1 lg:col-span-1">
                     <Button
+                        onClick={refetch}
+                        disabled={blockChange}
                         variant="outline"
                         className="w-full"
                     >
-                        <RotateCcw className="h-4 w-4" />
+                        <RotateCcw className={`h-4 w-4 ${blockChange ? "animate-spin" : ""}`} />
                     </Button>
                 </div>
             </div>
