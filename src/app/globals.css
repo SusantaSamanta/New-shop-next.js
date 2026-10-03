@@ -84,7 +84,7 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: #0c0c0c;
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -115,6 +115,26 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Tailwind color overrides */
+  --color-gray-50: #1f2328;
+  --color-gray-100: #252830;
+  --color-gray-200: #2d3139;
+  --color-gray-300: #3d4148;
+  --color-gray-500: #94a3b8;
+  --color-gray-600: #cbd5e1;
+  --color-gray-700: #e2e8f0;
+  --color-gray-800: #ebf1f8;
+  --color-gray-900: #f1f5f9;
+  --color-slate-50: #1a1d23;
+  --color-slate-100: #1f2328;
+  --color-slate-200: #2d3139;
+  --color-slate-300: #5b6271;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #cbd5e1;
+  --color-slate-700: #e2e8f0;
+  --color-slate-800: #e7ecf4;
+  --color-slate-900: #f1f5f9;
 }
 
 @layer base {
@@ -128,3 +148,10 @@
     @apply font-sans;
   }
 }
+
+/* For scroll bar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+

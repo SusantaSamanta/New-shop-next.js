@@ -10,7 +10,7 @@ export default function MainLayout({
     <div className="">
       <Header />
 
-      <main>{children}</main>
+      <main className="">{children}</main>
 
       <MobileBottomNav />
     </div>

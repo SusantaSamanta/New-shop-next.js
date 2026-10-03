@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,6 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ChevronRight } from "lucide-react";
 
 const ShopByCategory = () => {
   return (
@@ -22,9 +22,9 @@ const ShopByCategory = () => {
 
         <Link
           href="/category"
-          className="text-green-600 dark:text-white font-medium hover:underline"
+          className="text-sm flex shrink-0 items-center gap-1 font-semibold text-emerald-700 hover:text-emerald-800 hover:underline"
         >
-          View All
+          See All <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
 
@@ -56,7 +56,7 @@ const ShopByCategory = () => {
                 </div>
 
                 <p className=" text-center text-xs  font-medium">
-                  {category.label.length <= 10? category.label : category.label.slice(0,10)+".."}
+                  {category.label.length <= 10 ? category.label : category.label.slice(0, 10) + ".."}
                 </p>
               </Link>
             </CarouselItem>

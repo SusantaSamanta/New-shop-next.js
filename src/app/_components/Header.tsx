@@ -23,7 +23,7 @@ const Header = () => {
 
     return (
         <header className={`shadow-sm fixed ${pathname.includes('/category') ? "-top-11" : "top-0"} md:top-0 w-full z-50  bg-background/50 dark:bg-background/70 backdrop-blur-md border-b-[0.5px]   transition-all duration-300`}>
-            <section className="max-w-7xl mx-auto px-4 py-1 md:py-2 flex items-center justify-between">
+            <section className="max-w-7xl mx-auto px-4 py-1.5 md:py-2 flex items-center justify-between">
                 {/* Left Side */}
                 <div className="flex items-center gap-4 md:gap-8">
                     <Link href={'/'} className="flex items-end gap-2">
