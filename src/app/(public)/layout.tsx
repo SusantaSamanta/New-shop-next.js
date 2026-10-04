@@ -8,9 +8,12 @@ export default function MainLayout({
 }) {
   return (
     <div className="">
-      <Header />
+      {/* <Header /> */}
 
-      <main className="">{children}</main>
+      <main className="">
+        <Header />
+        {children}
+      </main>
 
       <MobileBottomNav />
     </div>

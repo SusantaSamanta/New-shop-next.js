@@ -74,7 +74,7 @@ export default function WishlistPage() {
   const router = useRouter();
 
   return (
-    <main className="min-h-screen py-15 md:pt-20 md:pb-0">
+    <main className="min-h-screen pt-5 pb-15 md:py-6">
       <div className="mx-auto w-full max-w-7xl space-y-4 md:space-y-6 pb-4 px-2 md:px-6">
         {/* Header */}
         <div className="md-4 mb-6 flex items-center justify-between">

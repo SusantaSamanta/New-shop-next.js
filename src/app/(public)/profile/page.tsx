@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
     Bell,
@@ -17,6 +19,7 @@ import {
 } from "lucide-react";
 import { profile_page_banner } from "../../../../assets/bannerImages/BannerImages";
 import Image from "next/image";
+import { useCart } from "@/context/CartContext";
 
 /* ------------------------------------------------------------------ */
 /*                              Types                                  */
@@ -308,7 +311,13 @@ function ProductSection({
     );
 }
 
-function QuickLinkCard({ link }: { link: QuickLink }) {
+function QuickLinkCard({
+    link,
+    onClick,
+}: {
+    link: QuickLink;
+    onClick?: () => void;
+}) {
     const Icon = link.icon;
 
     const className = `group flex items-center gap-4 p-2 md:p-4 rounded-xl text-left transition-all duration-200 ${link.card}`;
@@ -343,6 +352,7 @@ function QuickLinkCard({ link }: { link: QuickLink }) {
         return (
             <button
                 type="button"
+                onClick={onClick}
                 className={className}
             >
                 {content}
@@ -401,8 +411,10 @@ function LinkSection({ rows }: { rows: LinkRow[] }) {
 /* ------------------------------------------------------------------ */
 
 export default function ProfilePage() {
+    const { setIsCartOpen } = useCart();
+
     return (
-        <div className="w-full h-auto flex items-center justify-center gap-3 flex-wrap py-15 md:pt-20 md:pb-0">
+        <div className="w-full h-auto flex items-center justify-center gap-3 flex-wrap pt-5 pb-15 md:py-6">
             <div className="w-full max-w-7xl space-y-4 md:space-y-6 px-2 md:px-6">
                 {/* Profile header */}
                 <section className="flex items-center justify-between gap-6 rounded-xl  p-4 sm:shadow-md overflow-hidden relative">
@@ -430,11 +442,11 @@ export default function ProfilePage() {
                                 Hi, {user.firstName} 👋
                             </h1>
 
-                            <p className="mt-1 text-sm text-gray-500 truncate">
+                            <p className="mt-1 text-sm text-gray-800 truncate">
                                 {user.email}
                             </p>
 
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-gray-800">
                                 {user.phone}
                             </p>
                         </div>
@@ -457,7 +469,7 @@ export default function ProfilePage() {
                     </div>
 
                     {/* Gradient color */}
-                    <div className="hidden sm:block absolute z-20 left-0 h-full w-full md:w-13/14 bg-linear-to-r from-green-100 via-emerald-100  dark:from-green-900 dark:via-emerald-700 rounded-lg"></div>
+                    <div className="hidden sm:block absolute z-20 left-0 h-full w-full md:w-13/14 bg-linear-to-r from-green-100 via-emerald-100  dark:from-green-600 dark:via-green-600 rounded-lg"></div>
 
                     {/* Banner Image */}
                     <div className="hidden sm:block absolute z-10 right-0 xl:block h-full w-200 overflow-hidden rounded-lg">
@@ -473,7 +485,15 @@ export default function ProfilePage() {
                 <section className="w-full">
                     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
                         {quickLinks.map((link) => (
-                            <QuickLinkCard key={link.key} link={link} />
+                            <QuickLinkCard
+                                key={link.key}
+                                link={link}
+                                onClick={
+                                    link.key === "cart"
+                                        ? () => setIsCartOpen(true)
+                                        : undefined
+                                }
+                            />
                         ))}
                     </div>
                 </section>

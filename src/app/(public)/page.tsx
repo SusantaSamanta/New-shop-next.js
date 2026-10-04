@@ -33,7 +33,7 @@ export default function Home() {
 
 
   return (
-    <div className="w-full h-auto flex items-center justify-center gap-3 flex-wrap py-15 md:pt-20 md:pb-0">
+    <div className="w-full h-auto flex items-center justify-center gap-3 flex-wrap pt-5 pb-15 md:py-6"> {/*  py-15 md:pt-20 md:pb-0 */}
       <div className="w-full max-w-7xl space-y-4 md:space-y-8 px-2 md:px-6">
         <section className="w-full flex justify-center rounded-2xl overflow-hidden">
           <BannerSlider />

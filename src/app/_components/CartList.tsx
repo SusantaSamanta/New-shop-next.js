@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useState } from 'react'
 import { Trash2, ShoppingCart, ArrowLeft } from 'lucide-react'
 
 import {
@@ -21,43 +20,50 @@ const cartItems = [
         name: 'Fresh Orange',
         quantity: 2,
         price: 10,
-        image: "https://rukminim2.flixcart.com/image/612/612/xif0q/shopsy-nut-dry-fruit/g/m/q/250-premium-mix-dry-fruits-healthy-nutmixed-mix-dry-fruits-1-original-imahkge8zfsawuya.jpeg?q=70"
+        image: "https://picsum.photos/400"
     },
     {
         id: 2,
         name: 'Mango Juice',
         quantity: 1,
         price: 20.97,
-        image: "https://rukminim2.flixcart.com/image/612/612/xif0q/shopsy-nut-dry-fruit/g/m/q/250-premium-mix-dry-fruits-healthy-nutmixed-mix-dry-fruits-1-original-imahkge8zfsawuya.jpeg?q=70"
+        image: "https://picsum.photos/300"
     },
     {
         id: 4,
         name: 'Mango Juice',
         quantity: 1,
         price: 20.97,
-        image: "https://rukminim2.flixcart.com/image/612/612/xif0q/shopsy-nut-dry-fruit/g/m/q/250-premium-mix-dry-fruits-healthy-nutmixed-mix-dry-fruits-1-original-imahkge8zfsawuya.jpeg?q=70"
+        image: "https://picsum.photos/500"
     },
     {
         id: 6,
         name: 'Mango Juice',
         quantity: 1,
         price: 20.97,
-        image: "https://rukminim2.flixcart.com/image/612/612/xif0q/shopsy-nut-dry-fruit/g/m/q/250-premium-mix-dry-fruits-healthy-nutmixed-mix-dry-fruits-1-original-imahkge8zfsawuya.jpeg?q=70"
+        image: "https://picsum.photos/600"
     },
     {
         id: 67,
         name: 'Fresh Mango',
         quantity: 1,
         price: 17.98,
-        image: "https://rukminim2.flixcart.com/image/612/612/xif0q/shopsy-nut-dry-fruit/g/m/q/250-premium-mix-dry-fruits-healthy-nutmixed-mix-dry-fruits-1-original-imahkge8zfsawuya.jpeg?q=70"
+        image: "https://picsum.photos/900"
     },
     {
         id: 657,
         name: 'Fresh Mango',
         quantity: 1,
         price: 17.98,
-        image: "https://rukminim2.flixcart.com/image/612/612/xif0q/shopsy-nut-dry-fruit/g/m/q/250-premium-mix-dry-fruits-healthy-nutmixed-mix-dry-fruits-1-original-imahkge8zfsawuya.jpeg?q=70"
-    }
+        image: "https://picsum.photos/800"
+    },
+    {
+        id: 457,
+        name: 'Fresh Mango',
+        quantity: 1,
+        price: 17.98,
+        image: "https://picsum.photos/800"
+    },
 ]
 
 const CartList = () => {
@@ -86,7 +92,7 @@ const CartList = () => {
                 className="w-full md:min-w-120 p-0  [&>button]:hidden"
             >
                 {/* Header */}
-                <SheetHeader className="bg-green-700 px-4 py-3">
+                <SheetHeader className="bg-green-700 px-4 py-2">
                     <SheetTitle className="flex gap-4 text-white">
                         {/* Custom Close Button */}
                         <div className='border-2 dark:border-white p-[2] rounded-full cursor-pointer'
@@ -99,7 +105,7 @@ const CartList = () => {
                 <SheetDescription className='hidden'>Not need</SheetDescription>
                 {/* Items */}
                 <div className="flex flex-col h-full overflow-y-hidden ">
-                    <div className="flex-1 overflow-y-scroll p-4 space-y-4">
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
 
                         {cartItems.map((item) => (
                             <div
@@ -140,7 +146,7 @@ const CartList = () => {
                             <span>${subtotal.toFixed(2)}</span>
                         </div>
 
-                        <Button className="w-full bg-green-700 hover:bg-green-800">
+                        <Button className="w-full py-2 bg-green-700 hover:bg-green-800">
                             Checkout
                         </Button>
                     </div>
