@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { Map, MapTileLayer } from "@/components/ui/map";
 import { useMapEvents } from "react-leaflet";
 import axios from "axios";
+import SavedAddresses, { SavedAddress } from "./SavedAddresses";
+import { EditAddressType } from "@/type/addressTypes";
 
 type LocationResult = {
     id: string;
@@ -98,7 +100,11 @@ function MapMovementHandler({
     return null;
 }
 
-export default function LocationPickerContent({onService, availableLocation}: {onService: () => void; availableLocation: (location: LocationResult | null) => void}) {
+export default function LocationPickerContent({ onService, availableLocation, editAddress }: {
+    onService: () => void;
+    availableLocation: (location: LocationResult | null) => void;
+    editAddress: (editLoc: EditAddressType | null) => void;
+}) {
 
     const [search, setSearch] = useState(""); // for store debounced value
     const [temp, setTemp] = useState(""); // for input field value 
@@ -173,13 +179,12 @@ export default function LocationPickerContent({onService, availableLocation}: {o
         fetchMapApi();
     }, [search]);
 
-
     useEffect(() => {
-        console.log(currentLati, currentLong)
-        if (currentLati === null || currentLong === null) {
-            return;
-        }
         const getLocation = async () => {
+            console.log(currentLati, currentLong)
+            if (currentLati === null || currentLong === null) {
+                return;
+            }
             try {
                 const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
 
@@ -232,9 +237,25 @@ export default function LocationPickerContent({onService, availableLocation}: {o
         getLocation();
     }, [currentLati, currentLong]);
 
-
     const [isServicesAvailable, setIsServicesAvailable] = useState(false);
     const [isCheckingService, setIsCheckingService] = useState(false);
+
+    const onSelectAddressEdit = (address: SavedAddress) => {
+        onService(); // Next step: open address details form for edit
+        console.log(address)
+        editAddress({
+            addressId: address.id,
+            apiAddress: address.apiAddress,
+            house: address.house,
+            street: address.street,
+            landmark: address.landmark,
+            label: address.label,
+            pincode: address.pincode,
+        });
+        availableLocation(null)
+        // toast.success("Address selectedssssssssssss");
+    };
+
     const handleConfirmLocation = async () => {
         if (selectedLocation?.latitude === null || selectedLocation?.longitude === null) {
             toast.error("Please select a location first");
@@ -262,7 +283,8 @@ export default function LocationPickerContent({onService, availableLocation}: {o
 
             onService(); // Next step: open address details form
             availableLocation(selectedLocation)
-            
+            editAddress(null);
+
         } catch (error) {
             console.error("Serviceability check error:", error);
             if (axios.isAxiosError(error)) {
@@ -275,6 +297,29 @@ export default function LocationPickerContent({onService, availableLocation}: {o
             setIsCheckingService(false);
         }
     };
+
+
+    const [detectingLocation, setDetectingLocation] = useState(false);
+    async function handleCurrentLocation() {
+        setDetectingLocation(true)
+
+        function gotLocation(position: any) {
+            console.log(position.coords.latitude, position.coords.longitude, position)
+            setCurrentLati(position.coords.latitude);
+            setCurrentLong(position.coords.longitude);
+            setDetectingLocation(false);
+        }
+        function failed(err: any) {
+            if (err.message === "User denied Geolocation") {
+                toast.error("Location permission denied!")
+            } else {
+                toast.error("Please turnon your location")
+            }
+            setDetectingLocation(false);
+        }
+        await navigator.geolocation.getCurrentPosition(gotLocation, failed);
+    }
+
 
 
 
@@ -302,6 +347,8 @@ export default function LocationPickerContent({onService, availableLocation}: {o
 
                         <button
                             type="button"
+                            onClick={() => handleCurrentLocation()}
+                            disabled={detectingLocation}
                             className="w-full flex items-center justify-center gap-1 rounded-md border px-2 py-2 font-medium disabled:opacity-50 bg-green-600 text-white transition-colors truncate"
                         >
                             <MapPin
@@ -309,7 +356,7 @@ export default function LocationPickerContent({onService, availableLocation}: {o
                                 strokeWidth={0.5}
                                 className="fill-white [&_circle]:fill-green-600"
                             />
-                            Detect your location automatically
+                            {detectingLocation ? "Detecting...." : "Detect location"}
                         </button>
                     </div>
 
@@ -525,20 +572,7 @@ export default function LocationPickerContent({onService, availableLocation}: {o
 
             {/*/////////// Save address ///////////////////////*/}
             <TabsContent value="saved" className="mt-5">
-                <div className="rounded-lg border border-dashed p-8 text-center">
-                    <MapPin
-                        size={28}
-                        className="mx-auto mb-3 text-muted-foreground"
-                    />
-
-                    <p className="text-sm font-medium">
-                        No saved addresses
-                    </p>
-
-                    <p className="mt-1 text-xs text-muted-foreground">
-                        Your saved delivery addresses will appear here.
-                    </p>
-                </div>
+                <SavedAddresses onEdit={onSelectAddressEdit} />
             </TabsContent>
 
 

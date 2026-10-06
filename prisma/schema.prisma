@@ -55,7 +55,7 @@
     updateAt DateTime @default(now()) @updatedAt
 
     // Relations
-    addresses Address[]
+    addresses address[]
   }
 
 
@@ -123,7 +123,7 @@ enum AddressLabel {
   OTHER
 }
 
-model Address {
+model address {
   id          String   @id @default(cuid())
 
   userId      String
@@ -141,6 +141,7 @@ model Address {
 
   latitude    Float
   longitude   Float
+  apiAddress  String
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useEffect, useState } from "react";
 import AddressForm from "./AddressForm";
 import { ArrowLeft } from "lucide-react";
+import { EditAddressType } from "@/type/addressTypes";
 
 
 type LocationResult = {
@@ -35,6 +36,7 @@ export default function LocationPicker({
     const [isMobile, setIsMobile] = useState(false);
     const [isServicesAvailable, setIsServicesAvailable] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<LocationResult | null>(null);
+    const [editLocation, setEditLocation] = useState<EditAddressType | null>(null);
     useEffect(() => {
         const mediaQuery = window.matchMedia("(max-width: 640px)");
         const handleChange = () => setIsMobile(mediaQuery.matches);
@@ -73,9 +75,9 @@ export default function LocationPicker({
                                 </DialogHeader>
                                     <AddressForm
                                         selectedLocation={selectedLocation}
+                                        editAddress={editLocation}
                                         dealerId={"dealerId"!}
-                                        onBack={() => { setIsServicesAvailable(false); setSelectedLocation(null) }}
-                                        onClose={() => onOpenChange(false)}
+                                        onClose={() => { onOpenChange(false); setIsServicesAvailable(false); setSelectedLocation(null) }}
                                     />
                                 </>
                                 :
@@ -83,7 +85,11 @@ export default function LocationPicker({
                                     <DialogHeader>
                                         <DialogTitle>Choose delivery location</DialogTitle>
                                     </DialogHeader>
-                                    <LocationPickerContent onService={() => setIsServicesAvailable(true)} availableLocation={(loc) => setSelectedLocation(loc)} />
+                                    <LocationPickerContent
+                                        onService={() => setIsServicesAvailable(true)}
+                                        availableLocation={(loc) => setSelectedLocation(loc)}
+                                        editAddress={(loc) => {setEditLocation(loc)}}
+                                    />
                                 </>
 
                             }
@@ -118,9 +124,9 @@ export default function LocationPicker({
                                     </SheetHeader>
                                     <AddressForm
                                         selectedLocation={selectedLocation}
+                                        editAddress={editLocation}
                                         dealerId={"dealerId"!}
-                                        onBack={() => { setIsServicesAvailable(false); setSelectedLocation(null) }}
-                                        onClose={() => onOpenChange(false)}
+                                        onClose={() => { onOpenChange(false); setIsServicesAvailable(false); setSelectedLocation(null) }}
                                     />
                                 </>
                                 :
@@ -133,7 +139,11 @@ export default function LocationPicker({
                                     </SheetHeader>
 
                                     <div className="h-[calc(90vh-100px)] overflow-y-auto">
-                                        <LocationPickerContent onService={() => setIsServicesAvailable(true)} availableLocation={(loc) => setSelectedLocation(loc)} />
+                                        <LocationPickerContent
+                                            onService={() => setIsServicesAvailable(true)}
+                                            availableLocation={(loc) => setSelectedLocation(loc)}
+                                            editAddress={(loc) => setEditLocation(loc)}
+                                        />
                                     </div>
 
                                 </>
