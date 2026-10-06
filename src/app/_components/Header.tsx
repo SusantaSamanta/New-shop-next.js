@@ -186,7 +186,7 @@ function SetLocation() {
                 {/* Location Icon */}
                 <MapPin
                     size={20}
-                    strokeWidth={2}
+                    strokeWidth={0.5}
                     className="shrink-0 text-emerald-600 fill-emerald-600 [&_circle]:fill-white "
                 />
 

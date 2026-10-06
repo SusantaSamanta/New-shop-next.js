@@ -76,11 +76,11 @@
 
 
 # Remove-Item -Recurse -Force .next  
-<!-- Remove-Item -Recurse -Force .next  -->
-<!-- Remove-Item -Recurse -Force .next  -->
+	Remove-Item -Recurse -Force .next  
+	Remove-Item -Recurse -Force .next 
 
 
-# s
+# Basic commends 
 
 	\l                  → List databases
 	\c database_name    → Connect to database

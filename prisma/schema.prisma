@@ -42,16 +42,24 @@
     verifyCodeExpire String
     isEmailVerified  Boolean @default(false)
 
+    // Delivery Information
+    defaultAddressId   String?
+    dealerId            String?
+    isServiceAvailable  Boolean @default(false)
+
     // Notification Preference
     emailNotification Boolean @default(true)
     pushNotification  Boolean @default(true)
 
     createAt DateTime @default(now())
     updateAt DateTime @default(now()) @updatedAt
+
+    // Relations
+    addresses Address[]
   }
 
 
-  /////////////////////////////   Category Schemas  ///////////////////////////////////
+  ///////////////////////////// 📋  Category Schemas 📋 ///////////////////////////////////
   model categories {
     id          String   @id @default(cuid())
     name        String   @unique
@@ -68,7 +76,7 @@
   }
 
 
-  /////////////////////////////   Product Schemas  ///////////////////////////////////
+  /////////////////////////////  📋  Product Schemas  📋 ///////////////////////////////////
   model products {
     id          String   @id @default(cuid())
     name        String   @unique
@@ -105,5 +113,39 @@
     updatedAt DateTime @updatedAt
   }
 
+
+
+////////////////////////////// 📋 User Address Model 📋 ////////////////////////////////////////
+
+enum AddressLabel {
+  HOME
+  WORK
+  OTHER
+}
+
+model Address {
+  id          String   @id @default(cuid())
+
+  userId      String
+
+  label       AddressLabel   // HOME, WORK, OTHER
+
+  house       String?
+  street      String?
+  landmark    String?
+
+  city        String
+  state       String
+  country     String
+  pincode     String
+
+  latitude    Float
+  longitude   Float
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        users     @relation(fields: [userId], references: [id])
+}
 
 
