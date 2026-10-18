@@ -82,7 +82,7 @@ export default function WishlistPage() {
             <button
               type="button"
               onClick={() => router.back()}
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-card text-gray-700 transition-colors hover:bg-gray-100"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-card text-gray-700 transition-colors hover:bg-gray-100"
               aria-label="Go back"
             >
               <ArrowLeft className="h-5 w-5" />

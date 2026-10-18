@@ -13,3 +13,16 @@ export type EditAddressType = {
     pincode: string;
     label: "HOME" | "WORK" | "OTHER";
 }
+
+export type UserDefaultAddressType = {
+    addressId: string;
+    apiAddress: string;
+    latitude: number;
+    longitude: number;
+    isServiceAvailable: boolean;
+    pincode: string;
+    house: string;
+    street: string;
+    landmark?: string | null;
+    label: "HOME" | "WORK" | "OTHER";
+}

@@ -6,6 +6,7 @@ type RouteContext = {
     params: Promise<{ addressId: string }>;
 };
 
+// PUT: /api/address/[addressId]/default : used to set a specific address as the default address for the user
 export async function PUT(request: NextRequest, { params }: RouteContext) {
     try {
         const auth = await requireUser(request);

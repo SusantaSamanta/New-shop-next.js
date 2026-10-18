@@ -181,7 +181,6 @@ export default function LocationPickerContent({ onService, availableLocation, ed
 
     useEffect(() => {
         const getLocation = async () => {
-            console.log(currentLati, currentLong)
             if (currentLati === null || currentLong === null) {
                 return;
             }

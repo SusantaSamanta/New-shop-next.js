@@ -3,7 +3,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import { BriefcaseBusiness, Home, Loader2, MapPin, PenLine, Star } from "lucide-react";
+import { BriefcaseBusiness, Home, Loader2, MapPin, PenLine, Star, Trash2 } from "lucide-react";
+import { deleteUserAddress } from "@/services/addressService";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export type SavedAddress = {
     id: string;
@@ -48,6 +59,18 @@ export default function SavedAddresses({ onEdit }: SavedAddressesProps) {
     const [defaultingId, setDefaultingId] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+    const handleDeleteAddress = async (id: string) => {
+        setDeleteTargetId(null);
+
+        const data = await deleteUserAddress(id);
+
+        if (data.success) {
+            setAddresses((prev) => prev.filter((address) => address.id !== id));
+        }
+    }
+
 
     useEffect(() => {
         let isCancelled = false;
@@ -64,7 +87,7 @@ export default function SavedAddresses({ onEdit }: SavedAddressesProps) {
                     setDefaultAddressId(response.data?.defaultAddressId ?? null);
                 }
             } catch (err) {
-                console.error("Saved addresses fetch error:", err);
+                console.log("Saved addresses fetch error:", err);
 
                 const errorInfo = err as {
                     response?: { status?: number; data?: { message?: string } };
@@ -107,7 +130,7 @@ export default function SavedAddresses({ onEdit }: SavedAddressesProps) {
 
             toast.success(
                 response.data?.message ||
-                    "Default address updated successfully"
+                "Default address updated successfully"
             );
         } catch (err) {
             console.error("Set default address error:", err);
@@ -118,7 +141,7 @@ export default function SavedAddresses({ onEdit }: SavedAddressesProps) {
 
             toast.error(
                 errorInfo.response?.data?.message ||
-                    "Failed to update default address"
+                "Failed to update default address"
             );
         } finally {
             setDefaultingId(null);
@@ -169,6 +192,7 @@ export default function SavedAddresses({ onEdit }: SavedAddressesProps) {
     }
 
     return (
+        <>
         <div className="space-y-2">
             {addresses.map((address) => {
                 const LabelIcon = LABEL_ICONS[address.label] ?? MapPin;
@@ -250,10 +274,45 @@ export default function SavedAddresses({ onEdit }: SavedAddressesProps) {
                             <button onClick={() => onEdit(address)} className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full">
                                 <PenLine size={14} />
                             </button>
+                            {
+                                !isDefault &&
+                                <button onClick={() => setDeleteTargetId(address.id)} className="bg-gray-100 hover:text-red-500 hover:bg-red-500/10 p-2 rounded-full">
+                                    <Trash2 size={14} />
+                                </button>
+                            }
                         </div>
                     </div>
                 );
             })}
         </div>
+
+        <AlertDialog
+            open={deleteTargetId !== null}
+            onOpenChange={(open) => {
+                if (!open) setDeleteTargetId(null);
+            }}
+        >
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Delete address</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        Are you sure you want to remove this address from your
+                        saved addresses?
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                        className="bg-destructive text-white hover:bg-destructive/90"
+                        onClick={() => {
+                            if (deleteTargetId) handleDeleteAddress(deleteTargetId);
+                        }}
+                    >
+                        Delete
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+        </>
     );
 }

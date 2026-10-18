@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useEffect } from "react";
 import { EditAddressType } from "@/type/addressTypes";
+import { useSession } from "next-auth/react";
 
 type AddressFormProps = {
     selectedLocation: {
@@ -59,6 +60,10 @@ export default function AddressForm({
     dealerId,
     onClose,
 }: AddressFormProps) {
+
+
+    const { status } = useSession();
+
     const isEditing = Boolean(editAddress);
 
     const form = useForm<FormSchema>({
@@ -84,6 +89,12 @@ export default function AddressForm({
     }, [editAddress]);
 
     const onSubmit = async (data: FormSchema) => {
+
+        if (status !== "authenticated") {
+            toast.error("Please login to save location.");
+            return;
+        }
+
         const addressToEdit = editAddress;
 
         if (addressToEdit) {
@@ -189,9 +200,9 @@ export default function AddressForm({
                     <p className="mt-1 truncate text-sm text-gray-700">
                         {isEditing
                             ? editAddress?.apiAddress ||
-                              [editAddress?.house, editAddress?.street]
-                                  .filter(Boolean)
-                                  .join(", ")
+                            [editAddress?.house, editAddress?.street]
+                                .filter(Boolean)
+                                .join(", ")
                             : `${selectedLocation?.name} ${selectedLocation?.address}`.trim()}
                     </p>
                 </div>
